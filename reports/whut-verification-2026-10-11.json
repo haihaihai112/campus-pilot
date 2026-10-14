@@ -1,0 +1,731 @@
+{
+  "version": "0.3.0",
+  "python": "3.11.16",
+  "platform": "Windows-10-10.0.22631-SP0",
+  "dependencies": {
+    "campus-pilot": "0.3.0",
+    "mcp": "1.30.0",
+    "a2a-sdk": "0.3.26",
+    "langgraph": "1.2.11",
+    "fastapi": "0.141.1",
+    "gradio": "5.50.0",
+    "pydantic": "2.12.3"
+  },
+  "paid_model_calls": 0,
+  "model_mode": "fixture",
+  "data_profile": "whut-2026",
+  "full_suite": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "104",
+    "time": "124.657",
+    "timestamp": "2026-10-11T17:16:33.278259+08:00",
+    "hostname": "haihaihai"
+  },
+  "tests": [
+    {
+      "name": "test_model_cannot_invoke_write_tool",
+      "classname": "tests.test_agent_guards",
+      "seconds": 0.054,
+      "status": "passed"
+    },
+    {
+      "name": "test_model_iteration_budget_is_enforced",
+      "classname": "tests.test_agent_guards",
+      "seconds": 0.032,
+      "status": "passed"
+    },
+    {
+      "name": "test_tool_budget_is_enforced",
+      "classname": "tests.test_agent_guards",
+      "seconds": 0.04,
+      "status": "passed"
+    },
+    {
+      "name": "test_search_budget_is_enforced",
+      "classname": "tests.test_agent_guards",
+      "seconds": 0.044,
+      "status": "passed"
+    },
+    {
+      "name": "test_dependencies_and_travel",
+      "classname": "tests.test_core",
+      "seconds": 0.002,
+      "status": "passed"
+    },
+    {
+      "name": "test_closed_window_moves_to_monday",
+      "classname": "tests.test_core",
+      "seconds": 0.001,
+      "status": "passed"
+    },
+    {
+      "name": "test_existing_event_and_travel_both_sides",
+      "classname": "tests.test_core",
+      "seconds": 0.001,
+      "status": "passed"
+    },
+    {
+      "name": "test_available_windows_and_unarranged",
+      "classname": "tests.test_core",
+      "seconds": 0.001,
+      "status": "passed"
+    },
+    {
+      "name": "test_completed_dependency_not_repeated",
+      "classname": "tests.test_core",
+      "seconds": 0.002,
+      "status": "passed"
+    },
+    {
+      "name": "test_validator_detects_bad_schedule",
+      "classname": "tests.test_core",
+      "seconds": 0.001,
+      "status": "passed"
+    },
+    {
+      "name": "test_atomic_idempotent_save_and_ics",
+      "classname": "tests.test_core",
+      "seconds": 0.063,
+      "status": "passed"
+    },
+    {
+      "name": "test_save_revalidates_conflicts",
+      "classname": "tests.test_core",
+      "seconds": 0.036,
+      "status": "passed"
+    },
+    {
+      "name": "test_todo_version_and_idempotency",
+      "classname": "tests.test_core",
+      "seconds": 0.044,
+      "status": "passed"
+    },
+    {
+      "name": "test_retrieval_filters_and_metadata",
+      "classname": "tests.test_core",
+      "seconds": 0.034,
+      "status": "passed"
+    },
+    {
+      "name": "test_seed_documents_match_structured",
+      "classname": "tests.test_core",
+      "seconds": 0.001,
+      "status": "passed"
+    },
+    {
+      "name": "test_missing_timezone_rejected",
+      "classname": "tests.test_core",
+      "seconds": 0.001,
+      "status": "passed"
+    },
+    {
+      "name": "test_missing_map_key_never_calls_network",
+      "classname": "tests.test_integrations",
+      "seconds": 0.004,
+      "status": "passed"
+    },
+    {
+      "name": "test_invalid_coordinates[nan,30]",
+      "classname": "tests.test_integrations",
+      "seconds": 0.001,
+      "status": "passed"
+    },
+    {
+      "name": "test_invalid_coordinates[120,inf]",
+      "classname": "tests.test_integrations",
+      "seconds": 0.001,
+      "status": "passed"
+    },
+    {
+      "name": "test_invalid_coordinates[181,20]",
+      "classname": "tests.test_integrations",
+      "seconds": 0.001,
+      "status": "passed"
+    },
+    {
+      "name": "test_invalid_coordinates[120,91]",
+      "classname": "tests.test_integrations",
+      "seconds": 0.001,
+      "status": "passed"
+    },
+    {
+      "name": "test_invalid_coordinates[abc]",
+      "classname": "tests.test_integrations",
+      "seconds": 0.001,
+      "status": "passed"
+    },
+    {
+      "name": "test_invalid_coordinates[120,20,30]",
+      "classname": "tests.test_integrations",
+      "seconds": 0.001,
+      "status": "passed"
+    },
+    {
+      "name": "test_map_errors_do_not_expose_key[10001-authentication]",
+      "classname": "tests.test_integrations",
+      "seconds": 0.005,
+      "status": "passed"
+    },
+    {
+      "name": "test_map_errors_do_not_expose_key[10003-rate_limited]",
+      "classname": "tests.test_integrations",
+      "seconds": 0.005,
+      "status": "passed"
+    },
+    {
+      "name": "test_places_keep_ambiguous_candidates",
+      "classname": "tests.test_integrations",
+      "seconds": 0.006,
+      "status": "passed"
+    },
+    {
+      "name": "test_route_parsing_is_current_estimate",
+      "classname": "tests.test_integrations",
+      "seconds": 0.005,
+      "status": "passed"
+    },
+    {
+      "name": "test_weather_does_not_invent_unavailable_date",
+      "classname": "tests.test_integrations",
+      "seconds": 0.005,
+      "status": "passed"
+    },
+    {
+      "name": "test_synthetic_campus_has_no_real_coordinate",
+      "classname": "tests.test_integrations",
+      "seconds": 0.003,
+      "status": "passed"
+    },
+    {
+      "name": "test_calendar_without_platform_is_not_empty_success",
+      "classname": "tests.test_integrations",
+      "seconds": 0.033,
+      "status": "passed"
+    },
+    {
+      "name": "test_calendar_idempotency_persists_across_restart",
+      "classname": "tests.test_integrations",
+      "seconds": 0.145,
+      "status": "passed"
+    },
+    {
+      "name": "test_calendar_partial_failure_resumes_completed_items",
+      "classname": "tests.test_integrations",
+      "seconds": 0.243,
+      "status": "passed"
+    },
+    {
+      "name": "test_calendar_uncertain_remote_outcome_reconciles_stable_key",
+      "classname": "tests.test_integrations",
+      "seconds": 0.201,
+      "status": "passed"
+    },
+    {
+      "name": "test_calendar_binding_version_and_owner_checks",
+      "classname": "tests.test_integrations",
+      "seconds": 0.113,
+      "status": "passed"
+    },
+    {
+      "name": "test_calendar_conflict_prevents_writes",
+      "classname": "tests.test_integrations",
+      "seconds": 0.117,
+      "status": "passed"
+    },
+    {
+      "name": "test_calendar_updated_plan_upserts_existing_remote_events",
+      "classname": "tests.test_integrations",
+      "seconds": 0.363,
+      "status": "passed"
+    },
+    {
+      "name": "test_calendar_query_validates_timezone_and_range",
+      "classname": "tests.test_integrations",
+      "seconds": 0.099,
+      "status": "passed"
+    },
+    {
+      "name": "test_malformed_provider_response_is_structured_error[body0-weather-args0]",
+      "classname": "tests.test_integrations",
+      "seconds": 0.01,
+      "status": "passed"
+    },
+    {
+      "name": "test_malformed_provider_response_is_structured_error[body1-search_places-args1]",
+      "classname": "tests.test_integrations",
+      "seconds": 0.009,
+      "status": "passed"
+    },
+    {
+      "name": "test_malformed_provider_response_is_structured_error[body2-get_route-args2]",
+      "classname": "tests.test_integrations",
+      "seconds": 0.008,
+      "status": "passed"
+    },
+    {
+      "name": "test_malformed_provider_response_is_structured_error[body3-weather-args3]",
+      "classname": "tests.test_integrations",
+      "seconds": 0.009,
+      "status": "passed"
+    },
+    {
+      "name": "test_calendar_proposal_only_executes_after_confirmation",
+      "classname": "tests.test_integrations",
+      "seconds": 0.193,
+      "status": "passed"
+    },
+    {
+      "name": "test_login_required_and_cookie_logout",
+      "classname": "tests.test_pilot",
+      "seconds": 1.318,
+      "status": "passed"
+    },
+    {
+      "name": "test_login_tokens_hashed_expire_and_disable",
+      "classname": "tests.test_pilot",
+      "seconds": 0.943,
+      "status": "passed"
+    },
+    {
+      "name": "test_cross_origin_writes_and_login_rejected",
+      "classname": "tests.test_pilot",
+      "seconds": 0.614,
+      "status": "passed"
+    },
+    {
+      "name": "test_all_record_routes_enforce_ownership",
+      "classname": "tests.test_pilot",
+      "seconds": 0.819,
+      "status": "passed"
+    },
+    {
+      "name": "test_model_cannot_select_another_user",
+      "classname": "tests.test_pilot",
+      "seconds": 0.046,
+      "status": "passed"
+    },
+    {
+      "name": "test_http_limits_and_persistent_counters",
+      "classname": "tests.test_pilot",
+      "seconds": 0.651,
+      "status": "passed"
+    },
+    {
+      "name": "test_login_attempts_limited_before_hashing",
+      "classname": "tests.test_pilot",
+      "seconds": 0.069,
+      "status": "passed"
+    },
+    {
+      "name": "test_chat_hourly_limit_and_pending_admission",
+      "classname": "tests.test_pilot",
+      "seconds": 0.071,
+      "status": "passed"
+    },
+    {
+      "name": "test_global_pending_limit_prevents_unbounded_jobs",
+      "classname": "tests.test_pilot",
+      "seconds": 0.077,
+      "status": "passed"
+    },
+    {
+      "name": "test_per_user_pending_limit_does_not_block_another_user",
+      "classname": "tests.test_pilot",
+      "seconds": 0.141,
+      "status": "passed"
+    },
+    {
+      "name": "test_active_turn_semaphore_limits_processing",
+      "classname": "tests.test_pilot",
+      "seconds": 0.551,
+      "status": "passed"
+    },
+    {
+      "name": "test_feedback_updates_one_record_and_metrics_separate_modes",
+      "classname": "tests.test_pilot",
+      "seconds": 0.956,
+      "status": "passed"
+    },
+    {
+      "name": "test_pilot_refuses_demo_service_credentials",
+      "classname": "tests.test_pilot",
+      "seconds": 0.003,
+      "status": "passed"
+    },
+    {
+      "name": "test_two_user_real_protocol_plan_save_export_restart",
+      "classname": "tests.test_pilot",
+      "seconds": 27.048,
+      "status": "passed"
+    },
+    {
+      "name": "test_ui_callbacks_reject_foreign_session",
+      "classname": "tests.test_pilot",
+      "seconds": 1.043,
+      "status": "passed"
+    },
+    {
+      "name": "test_mcp_discovery_auth_and_readonly",
+      "classname": "tests.test_protocols",
+      "seconds": 11.99,
+      "status": "passed"
+    },
+    {
+      "name": "test_a2a_input_required_resume_artifact",
+      "classname": "tests.test_protocols",
+      "seconds": 0.523,
+      "status": "passed"
+    },
+    {
+      "name": "test_a2a_cancel_waiting_task",
+      "classname": "tests.test_protocols",
+      "seconds": 0.219,
+      "status": "passed"
+    },
+    {
+      "name": "test_simple_question_does_not_delegate",
+      "classname": "tests.test_protocols",
+      "seconds": 0.293,
+      "status": "passed"
+    },
+    {
+      "name": "test_unknown_fee_does_not_invent_amount",
+      "classname": "tests.test_protocols",
+      "seconds": 0.189,
+      "status": "passed"
+    },
+    {
+      "name": "test_end_to_end_confirmation_and_restart",
+      "classname": "tests.test_protocols",
+      "seconds": 8.132,
+      "status": "passed"
+    },
+    {
+      "name": "test_stale_and_rejected_actions",
+      "classname": "tests.test_protocols",
+      "seconds": 0.07,
+      "status": "passed"
+    },
+    {
+      "name": "test_planner_failure_does_not_break_rag",
+      "classname": "tests.test_protocols",
+      "seconds": 4.691,
+      "status": "passed"
+    },
+    {
+      "name": "test_active_task_can_be_canceled",
+      "classname": "tests.test_protocols",
+      "seconds": 0.347,
+      "status": "passed"
+    },
+    {
+      "name": "test_waiting_a2a_task_survives_planner_restart",
+      "classname": "tests.test_protocols",
+      "seconds": 2.874,
+      "status": "passed"
+    },
+    {
+      "name": "test_interrupted_turn_is_not_silently_reexecuted",
+      "classname": "tests.test_protocols",
+      "seconds": 3.439,
+      "status": "passed"
+    },
+    {
+      "name": "test_planner_restart_survives_in_flight_task_with_null_metadata",
+      "classname": "tests.test_protocols",
+      "seconds": 2.301,
+      "status": "passed"
+    },
+    {
+      "name": "test_mcp_down_returns_observable_failure",
+      "classname": "tests.test_protocols",
+      "seconds": 4.9,
+      "status": "passed"
+    },
+    {
+      "name": "test_planner_down_keeps_chat_and_queries_working",
+      "classname": "tests.test_protocols",
+      "seconds": 4.855,
+      "status": "passed"
+    },
+    {
+      "name": "test_planner_down_planning_request_fails_readably",
+      "classname": "tests.test_protocols",
+      "seconds": 4.54,
+      "status": "passed"
+    },
+    {
+      "name": "test_external_tools_real_mcp_discovery_and_unconfigured_state",
+      "classname": "tests.test_protocols",
+      "seconds": 0.279,
+      "status": "passed"
+    },
+    {
+      "name": "test_fixture_weather_calls_real_mcp_without_fabricated_forecast",
+      "classname": "tests.test_protocols",
+      "seconds": 0.191,
+      "status": "passed"
+    },
+    {
+      "name": "test_external_api_validation_and_calendar_no_platform",
+      "classname": "tests.test_protocols",
+      "seconds": 0.106,
+      "status": "passed"
+    },
+    {
+      "name": "test_real_source_provenance_and_unknowns",
+      "classname": "tests.test_whut",
+      "seconds": 0.032,
+      "status": "passed"
+    },
+    {
+      "name": "test_real_retrieval_rejects_wrong_scope[extra0]",
+      "classname": "tests.test_whut",
+      "seconds": 0.051,
+      "status": "passed"
+    },
+    {
+      "name": "test_real_retrieval_rejects_wrong_scope[extra1]",
+      "classname": "tests.test_whut",
+      "seconds": 0.04,
+      "status": "passed"
+    },
+    {
+      "name": "test_real_retrieval_rejects_wrong_scope[extra2]",
+      "classname": "tests.test_whut",
+      "seconds": 0.029,
+      "status": "passed"
+    },
+    {
+      "name": "test_real_retrieval_rejects_wrong_scope[extra3]",
+      "classname": "tests.test_whut",
+      "seconds": 0.026,
+      "status": "passed"
+    },
+    {
+      "name": "test_real_retrieval_rejects_wrong_scope[extra4]",
+      "classname": "tests.test_whut",
+      "seconds": 0.026,
+      "status": "passed"
+    },
+    {
+      "name": "test_common_policy_not_reporting_location[whut]",
+      "classname": "tests.test_whut",
+      "seconds": 0.065,
+      "status": "passed"
+    },
+    {
+      "name": "test_common_policy_not_reporting_location[nanhu]",
+      "classname": "tests.test_whut",
+      "seconds": 0.065,
+      "status": "passed"
+    },
+    {
+      "name": "test_common_policy_not_reporting_location[mafangshan]",
+      "classname": "tests.test_whut",
+      "seconds": 0.04,
+      "status": "passed"
+    },
+    {
+      "name": "test_common_policy_not_reporting_location[yujiatou]",
+      "classname": "tests.test_whut",
+      "seconds": 0.027,
+      "status": "passed"
+    },
+    {
+      "name": "test_profile_switch_never_overwrites_history",
+      "classname": "tests.test_whut",
+      "seconds": 0.017,
+      "status": "passed"
+    },
+    {
+      "name": "test_preview_confirmation_idempotency_and_restart",
+      "classname": "tests.test_whut",
+      "seconds": 0.04,
+      "status": "passed"
+    },
+    {
+      "name": "test_green_channel_conditions[origin_loan-\\u56de\\u6267\\u5355]",
+      "classname": "tests.test_whut",
+      "seconds": 0.023,
+      "status": "passed"
+    },
+    {
+      "name": "test_green_channel_conditions[campus_loan-\\u8eab\\u4efd\\u8bc1\\u590d\\u5370\\u4ef6]",
+      "classname": "tests.test_whut",
+      "seconds": 0.026,
+      "status": "passed"
+    },
+    {
+      "name": "test_green_channel_unknown_is_not_approved",
+      "classname": "tests.test_whut",
+      "seconds": 0.018,
+      "status": "passed"
+    },
+    {
+      "name": "test_past_deadline_not_rescheduled",
+      "classname": "tests.test_whut",
+      "seconds": 0.017,
+      "status": "passed"
+    },
+    {
+      "name": "test_execution_revalidates_against_source[time]",
+      "classname": "tests.test_whut",
+      "seconds": 0.023,
+      "status": "passed"
+    },
+    {
+      "name": "test_execution_revalidates_against_source[materials]",
+      "classname": "tests.test_whut",
+      "seconds": 0.022,
+      "status": "passed"
+    },
+    {
+      "name": "test_execution_revalidates_against_source[evidence]",
+      "classname": "tests.test_whut",
+      "seconds": 0.024,
+      "status": "passed"
+    },
+    {
+      "name": "test_execution_revalidates_against_source[version]",
+      "classname": "tests.test_whut",
+      "seconds": 0.023,
+      "status": "passed"
+    },
+    {
+      "name": "test_execution_revalidates_against_source[profile]",
+      "classname": "tests.test_whut",
+      "seconds": 0.025,
+      "status": "passed"
+    },
+    {
+      "name": "test_explicit_personal_reminder_export_and_conflict",
+      "classname": "tests.test_whut",
+      "seconds": 0.037,
+      "status": "passed"
+    },
+    {
+      "name": "test_new_version_and_old_snapshot",
+      "classname": "tests.test_whut",
+      "seconds": 0.043,
+      "status": "passed"
+    },
+    {
+      "name": "test_reminder_deadline_uses_shanghai_date",
+      "classname": "tests.test_whut",
+      "seconds": 0.02,
+      "status": "passed"
+    },
+    {
+      "name": "test_whut_real_protocols_and_clarification",
+      "classname": "tests.test_whut",
+      "seconds": 15.135,
+      "status": "passed"
+    },
+    {
+      "name": "test_whut_chat_save_restart_and_raw_trace",
+      "classname": "tests.test_whut",
+      "seconds": 11.713,
+      "status": "passed"
+    },
+    {
+      "name": "test_whut_unsupported_year_and_planner_failure",
+      "classname": "tests.test_whut",
+      "seconds": 5.265,
+      "status": "passed"
+    },
+    {
+      "name": "test_whut_green_followup_and_cancel",
+      "classname": "tests.test_whut",
+      "seconds": 0.771,
+      "status": "passed"
+    },
+    {
+      "name": "test_whut_reminder_via_main_agent",
+      "classname": "tests.test_whut",
+      "seconds": 0.811,
+      "status": "passed"
+    }
+  ],
+  "test_groups": {
+    "synthetic_baseline": 75,
+    "whut_source_checks": 29
+  },
+  "smoke": true,
+  "native_launch": true,
+  "sources": [
+    {
+      "evidence_id": "E-whut-2026-registration",
+      "source_url": "https://welcome.whut.edu.cn/info/1061/1161.htm",
+      "snapshot_sha256": "0aa167ed2965ec9d4821c9270cac71b9fc7b30538fc2935b3fbfa2da59e8c5a1",
+      "fetched_at": "2026-10-11",
+      "cohort_year": 2026,
+      "student_type": "undergraduate",
+      "source_notes": [
+        "仅适用于2026级本科生；来源快照不代表政策持续有效，个人通知优先。",
+        "网页description仍含2025字样，正文明确2026；本资料以正文为准并保留差异。"
+      ]
+    },
+    {
+      "evidence_id": "E-whut-2026-fees",
+      "source_url": "https://welcome.whut.edu.cn/info/1061/1121.htm",
+      "snapshot_sha256": "587ddb25366d86b71b3c64e799fc70025425843e1c5e323879359c5087f92191",
+      "fetched_at": "2026-10-11",
+      "cohort_year": 2026,
+      "student_type": "undergraduate",
+      "source_notes": [
+        "仅适用于2026级本科生；来源快照不代表政策持续有效，个人通知优先。",
+        "年份依据本科入口及页面2026标识；不得推及2027年或研究生。",
+        "专业学费表为图片未转录；医保按最新文件，个人总费用未知。"
+      ]
+    },
+    {
+      "evidence_id": "E-whut-2026-green",
+      "source_url": "https://welcome.whut.edu.cn/info/1061/1151.htm",
+      "snapshot_sha256": "e28d07f95cf45ffa9e9c1e1348e164f8f94c31eaeeaaee208cbe054ac352c1d3",
+      "fetched_at": "2026-10-11",
+      "cohort_year": 2026,
+      "student_type": "undergraduate",
+      "source_notes": [
+        "仅适用于2026级本科生；来源快照不代表政策持续有效，个人通知优先。",
+        "年份依据本科入口及页面2026标识；不得推及2027年或研究生。"
+      ]
+    },
+    {
+      "evidence_id": "E-whut-2026-timeline",
+      "source_url": "https://welcome.whut.edu.cn/index/bksxsbd.htm",
+      "snapshot_sha256": "d650a11efe83cf40e5d3a5c77dc013544ec6aa8f9a656325387e5c3d3527e7d2",
+      "fetched_at": "2026-10-11",
+      "cohort_year": 2026,
+      "student_type": "undergraduate",
+      "source_notes": [
+        "仅适用于2026级本科生；来源快照不代表政策持续有效，个人通知优先。"
+      ]
+    }
+  ],
+  "source_documents": 4,
+  "checklist_templates": 11,
+  "checks": {
+    "ruff": "passed",
+    "uv_lock_offline": "passed",
+    "uv_sync_offline": "passed",
+    "wheel_contains_data": true,
+    "docker_compose_parse": "passed"
+  },
+  "original_source": {
+    "unchanged_count": 76,
+    "changed_or_missing": []
+  },
+  "not_verified": [
+    "live-model semantic quality",
+    "Milvus",
+    "Docker runtime",
+    "50-100 user load",
+    "real adoption",
+    "school account integration"
+  ],
+  "model_quality_metrics": null
+}

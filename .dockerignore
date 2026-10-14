@@ -1,0 +1,10 @@
+.venv
+.env
+.env.pilot
+.env.*.local
+runtime
+runtime-*
+reports
+__pycache__
+.pytest_cache
+.git

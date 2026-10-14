@@ -1,0 +1,22 @@
+{
+  "mode": "fixture",
+  "paid_model_calls": 0,
+  "checks_passed": true,
+  "health": {
+    "status": "ok",
+    "dependencies": {
+      "rag": true,
+      "campus": true,
+      "planner": true
+    },
+    "product": "CampusPilot",
+    "auth_mode": "demo",
+    "model_mode": "fixture",
+    "model": "deepseek-chat",
+    "synthetic_data": false,
+    "data_profile": "whut-2026",
+    "source_snapshot_date": "2026-10-11",
+    "source_scope": "2026级本科",
+    "demo_date": "2026-10-11"
+  }
+}

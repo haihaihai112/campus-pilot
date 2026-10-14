@@ -1,0 +1,76 @@
+x-shared: &shared
+  build: .
+  restart: unless-stopped
+  environment: &env
+    MODEL_MODE: ${MODEL_MODE:-fixture}
+    CAMPUS_DATA_PROFILE: ${CAMPUS_DATA_PROFILE:-whut-2026}
+    DEMO_DATE: ${DEMO_DATE:-}
+    LLM_MODEL: ${LLM_MODEL:-deepseek-chat}
+    LLM_API_KEY: ${LLM_API_KEY:-${DASHSCOPE_API_KEY:-}}
+    LLM_BASE_URL: ${LLM_BASE_URL:-https://api.deepseek.com/v1}
+    RAG_MCP_URL: http://rag:8030/mcp
+    CAMPUS_MCP_URL: http://tools:8040/mcp
+    PLANNER_URL: http://planner:8020
+    MCP_READ_TOKEN: ${MCP_READ_TOKEN:-local-demo-read}
+    MCP_WRITE_TOKEN: ${MCP_WRITE_TOKEN:-local-demo-write}
+    A2A_TOKEN: ${A2A_TOKEN:-local-demo-a2a}
+    AUTH_MODE: ${AUTH_MODE:-demo}
+    COOKIE_SECURE: ${COOKIE_SECURE:-true}
+    TURNS_PER_HOUR: ${TURNS_PER_HOUR:-20}
+    REQUESTS_PER_MINUTE: ${REQUESTS_PER_MINUTE:-240}
+    MAX_ACTIVE_TURNS: ${MAX_ACTIVE_TURNS:-4}
+    MAX_PENDING_TURNS: ${MAX_PENDING_TURNS:-32}
+    MAX_PENDING_PER_USER: ${MAX_PENDING_PER_USER:-2}
+services:
+  rag:
+    <<: *shared
+    command: [campus, rag, --host, 0.0.0.0]
+    volumes: [rag_data:/data]
+  tools:
+    <<: *shared
+    environment:
+      <<: *env
+      AMAP_API_KEY: ${AMAP_API_KEY:-}
+      CALENDAR_PROVIDER: ${CALENDAR_PROVIDER:-none}
+      CAMPUS_LOCATIONS_FILE: /config/campus-locations.json
+    command: [campus, tools, --host, 0.0.0.0]
+    volumes: [campus_data:/data, "./config:/config:ro"]
+  planner:
+    <<: *shared
+    command: [campus, planner, --host, 0.0.0.0]
+    volumes: [planner_data:/data]
+    depends_on: [rag, tools]
+  app:
+    <<: *shared
+    command: [campus, app, --host, 0.0.0.0]
+    ports: ["127.0.0.1:8010:8010"]
+    volumes: [app_data:/data]
+    depends_on: [rag, tools, planner]
+  etcd:
+    profiles: [milvus]
+    image: quay.io/coreos/etcd:v3.5.18
+    environment: {ETCD_AUTO_COMPACTION_MODE: revision, ETCD_AUTO_COMPACTION_RETENTION: "1000"}
+    command: etcd -advertise-client-urls=http://127.0.0.1:2379 -listen-client-urls=http://0.0.0.0:2379 --data-dir /etcd
+    volumes: [etcd_data:/etcd]
+  minio:
+    profiles: [milvus]
+    image: minio/minio:RELEASE.2024-12-18T13-15-44Z
+    environment: {MINIO_ACCESS_KEY: minioadmin, MINIO_SECRET_KEY: minioadmin}
+    command: minio server /minio_data --console-address :9001
+    volumes: [minio_data:/minio_data]
+  milvus:
+    profiles: [milvus]
+    image: milvusdb/milvus:v2.5.4
+    command: [milvus, run, standalone]
+    environment: {ETCD_ENDPOINTS: "etcd:2379", MINIO_ADDRESS: "minio:9000"}
+    ports: ["127.0.0.1:19530:19530"]
+    volumes: [milvus_data:/var/lib/milvus]
+    depends_on: [etcd, minio]
+volumes:
+  rag_data:
+  campus_data:
+  planner_data:
+  app_data:
+  etcd_data:
+  minio_data:
+  milvus_data:

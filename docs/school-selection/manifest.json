@@ -1,0 +1,94 @@
+{
+  "research_date": "2026-10-11",
+  "purpose": "school selection; not yet ingested as production knowledge",
+  "snapshots": [
+    {
+      "file": "snapshots/whut-fees.json",
+      "source_url": "https://welcome.whut.edu.cn/info/1061/1121.htm",
+      "status_code": 200,
+      "title": "新生收费项目及标准-迎新网站",
+      "sha256": "587ddb25366d86b71b3c64e799fc70025425843e1c5e323879359c5087f92191",
+      "scrape_id": "01a12a27-fb14-7507-8a19-989ee7266931"
+    },
+    {
+      "file": "snapshots/whut-graduate-guide.json",
+      "source_url": "https://welcome.whut.edu.cn/index/yjsxsbd/rxdd.htm",
+      "status_code": 200,
+      "title": "入学导读-迎新网站",
+      "sha256": "f1998dfdc6bf578b27ca341cc2c339ac2446b5fe70d9c2e1f9ecf6db7851461d",
+      "scrape_id": "01a12a27-7e96-7003-a4c7-65d2540d621c"
+    },
+    {
+      "file": "snapshots/whut-graduate.json",
+      "source_url": "https://welcome.whut.edu.cn/index/yjsxsbd.htm",
+      "status_code": 200,
+      "title": "研究生新生报到-迎新网站",
+      "sha256": "b1e79fc93a1c55f46e0de6ce00a5138b33eae363265c74218332a73e4c39570f",
+      "scrape_id": "01a12a27-086b-7266-a924-0af84c3889f6"
+    },
+    {
+      "file": "snapshots/whut-green-channel.json",
+      "source_url": "https://welcome.whut.edu.cn/info/1061/1151.htm",
+      "status_code": 200,
+      "title": "新生入学“绿色通道”介绍-迎新网站",
+      "sha256": "e28d07f95cf45ffa9e9c1e1348e164f8f94c31eaeeaaee208cbe054ac352c1d3",
+      "scrape_id": "01a12a27-fac0-74fd-9262-6be90fb9a3f5"
+    },
+    {
+      "file": "snapshots/whut-life.json",
+      "source_url": "https://welcome.whut.edu.cn/index/bksxsbd/lgsh.htm",
+      "status_code": 200,
+      "title": "理工生活-迎新网站",
+      "sha256": "ae3888eb1d699ec71081e26d7d85289f85c0001ab713b89ae84bd8355d40f50b",
+      "scrape_id": "01a12a27-086c-76b6-bf13-a39312e2ff69"
+    },
+    {
+      "file": "snapshots/whut-registration.json",
+      "source_url": "https://welcome.whut.edu.cn/info/1061/1161.htm",
+      "status_code": 200,
+      "title": "新生报到注意事项-迎新网站",
+      "sha256": "0aa167ed2965ec9d4821c9270cac71b9fc7b30538fc2935b3fbfa2da59e8c5a1",
+      "scrape_id": "01a12a27-fb04-77ce-a5fb-db9a242f8d5e"
+    },
+    {
+      "file": "snapshots/whut-transport.json",
+      "source_url": "https://welcome.whut.edu.cn/info/1051/1221.htm",
+      "status_code": 200,
+      "title": "来校交通路线-迎新网站",
+      "sha256": "54db5b2c2196e5e33ecf43551cc61ba6361876ee24c553f89b075c64660dab6c",
+      "scrape_id": "01a12a27-7e79-736e-b24c-85d5d68686f6"
+    },
+    {
+      "file": "snapshots/whut-undergraduate-full.json",
+      "source_url": "https://welcome.whut.edu.cn/index/bksxsbd.htm",
+      "status_code": 200,
+      "title": "本科生新生报到-迎新网站",
+      "sha256": "d650a11efe83cf40e5d3a5c77dc013544ec6aa8f9a656325387e5c3d3527e7d2",
+      "scrape_id": "01a12a27-0816-735d-9ec3-2b234d2af725"
+    },
+    {
+      "file": "snapshots/whut-undergraduate-guide.json",
+      "source_url": "https://welcome.whut.edu.cn/index/bksxsbd/rxdd.htm",
+      "status_code": 200,
+      "title": "入学导读-迎新网站",
+      "sha256": "c0a6b2f30d8417f747894e8504b1e634718445d851bd343c7e7cff07f53c6766",
+      "scrape_id": "01a12a27-7eb1-76dd-8c36-0a4dffbed6f3"
+    },
+    {
+      "file": "snapshots/whut-undergraduate.json",
+      "source_url": "https://welcome.whut.edu.cn/index/bksxsbd.htm",
+      "status_code": 200,
+      "title": "本科生新生报到-迎新网站",
+      "sha256": "64564449b017b9ea14a3aebb1bee067914366b611e1d91637acd04e7ee99656a",
+      "scrape_id": "01a12a26-68df-7739-bd2e-72fb287655c8"
+    },
+    {
+      "file": "snapshots/whut-welcome.json",
+      "source_url": "https://welcome.whut.edu.cn/",
+      "status_code": 200,
+      "title": "迎新网站",
+      "sha256": "85ace35de80542350c472d2340579e1f4c9c4e68ce63a11b19de82f41fe27286",
+      "scrape_id": "01a12a26-683e-7102-b569-8dddec0cea37"
+    }
+  ]
+}

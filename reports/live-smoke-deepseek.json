@@ -1,0 +1,449 @@
+{
+  "health": {
+    "status": "ok",
+    "dependencies": {
+      "rag": true,
+      "campus": true,
+      "planner": true
+    },
+    "model_mode": "live",
+    "model": "deepseek-chat",
+    "synthetic_data": true,
+    "demo_date": "2026-09-05"
+  },
+  "records": [
+    {
+      "id": "97de5c4a-0f32-42f1-8500-ed7c17c18c62",
+      "session_id": "62efb9dd-b5c2-4616-8abf-301a847bcf3f",
+      "message": "新生报到需要带哪些材料？",
+      "status": "completed",
+      "reply": "# 新生报到所需材料\n\n两个校区的报到材料要求一致：\n\n**报到（入学登记）所需材料** [E-mingde-registration] [E-zhiyuan-registration]\n- 录取通知书\n- 身份证\n- 缴费或绿色通道核验记录\n\n**注意办理顺序**：需先完成缴费或绿色通道核验，再到报到点办理入学登记。报到地点为 gym（体育馆）。\n\n**如果走绿色通道**，缴费/核验环节另需 [E-mingde-payment] [E-zhiyuan-payment]\n- 录取通知书\n- 身份证\n- 缴费记录或绿色通道申请材料\n\n**后续宿舍入住**另需 [E-mingde-dorm]\n- 身份证\n- 报到凭证（报到后取得）\n\n---\n\n补充说明：\n- 以上为合成演示数据，不对应真实高校。\n- 个人学费金额未在资料中列明，应以你的缴费通知为准 [E-mingde-payment]。\n- 你尚未告知校区。明德与致远两校区材料要求相同，但办理地点与开放时间可能不同——如需具体时间安排，请告诉我你的校区。",
+      "citations": [
+        "E-mingde-registration",
+        "E-zhiyuan-registration",
+        "E-mingde-payment",
+        "E-zhiyuan-payment",
+        "E-mingde-dorm"
+      ],
+      "evidence": [
+        {
+          "evidence_id": "E-zhiyuan-registration",
+          "text": "标题：致远校区 新生报到\n致远校区新生报到。办理地点：gym。先完成缴费或绿色通道核验，再到报到点办理入学登记。\n所需材料：录取通知书、身份证、缴费或绿色通道核验记录。开放时间：工作日09:00—12:00、13:00—17:00；周六09:00—12:00、13:00—16:00；周日不开放。演示办理时长：40分钟。此数据为合成演示，不对应真实高校。",
+          "source": "E-zhiyuan-registration.md",
+          "title": "致远校区 新生报到",
+          "campus_id": "zhiyuan",
+          "valid_from": "2026-01-01",
+          "valid_to": "2026-12-31",
+          "version": "demo-2026.1",
+          "score": 0.522736,
+          "backend": "memory"
+        },
+        {
+          "evidence_id": "E-mingde-registration",
+          "text": "标题：明德校区 新生报到\n明德校区新生报到。办理地点：gym。先完成缴费或绿色通道核验，再到报到点办理入学登记。\n所需材料：录取通知书、身份证、缴费或绿色通道核验记录。开放时间：工作日09:00—12:00、13:00—17:00；周六09:00—12:00、13:00—16:00；周日不开放。演示办理时长：40分钟。此数据为合成演示，不对应真实高校。",
+          "source": "E-mingde-registration.md",
+          "title": "明德校区 新生报到",
+          "campus_id": "mingde",
+          "valid_from": "2026-01-01",
+          "valid_to": "2026-12-31",
+          "version": "demo-2026.1",
+          "score": 0.522736,
+          "backend": "memory"
+        },
+        {
+          "evidence_id": "E-mingde-payment",
+          "text": "标题：明德校区 缴费或绿色通道核验\n明德校区缴费或绿色通道核验。办理地点：finance。家庭经济困难的新生可申请绿色通道，先办理入学手续，再按要求提交资助材料。个人学费金额未在本资料中列明，应以缴费通知为准。\n所需材料：录取通知书、身份证、缴费记录或绿色通道申请材料。开放时间：工作日09:00—12:00、13:00—17:00；周六09:00—12:00、13:00—16:00；周日不开放。演示办理时长：30分钟。此数据为合成演示，不对应真实高校。",
+          "source": "E-mingde-payment.md",
+          "title": "明德校区 缴费或绿色通道核验",
+          "campus_id": "mingde",
+          "valid_from": "2026-01-01",
+          "valid_to": "2026-12-31",
+          "version": "demo-2026.1",
+          "score": 0.136653,
+          "backend": "memory"
+        },
+        {
+          "evidence_id": "E-zhiyuan-payment",
+          "text": "标题：致远校区 缴费或绿色通道核验\n致远校区缴费或绿色通道核验。办理地点：finance。家庭经济困难的新生可申请绿色通道，先办理入学手续，再按要求提交资助材料。个人学费金额未在本资料中列明，应以缴费通知为准。\n所需材料：录取通知书、身份证、缴费记录或绿色通道申请材料。开放时间：工作日09:00—12:00、13:00—17:00；周六09:00—12:00、13:00—16:00；周日不开放。演示办理时长：30分钟。此数据为合成演示，不对应真实高校。",
+          "source": "E-zhiyuan-payment.md",
+          "title": "致远校区 缴费或绿色通道核验",
+          "campus_id": "zhiyuan",
+          "valid_from": "2026-01-01",
+          "valid_to": "2026-12-31",
+          "version": "demo-2026.1",
+          "score": 0.136653,
+          "backend": "memory"
+        },
+        {
+          "evidence_id": "E-mingde-dorm",
+          "text": "标题：明德校区 宿舍入住\n明德校区宿舍入住。办理地点：dormitory。完成报到后，持报到凭证到宿舍服务台核验身份并领取钥匙。宿舍门禁为23:00，晚归需登记。\n所需材料：身份证、报到凭证。开放时间：每日09:00—21:00。演示办理时长：30分钟。此数据为合成演示，不对应真实高校。",
+          "source": "E-mingde-dorm.md",
+          "title": "明德校区 宿舍入住",
+          "campus_id": "mingde",
+          "valid_from": "2026-01-01",
+          "valid_to": "2026-12-31",
+          "version": "demo-2026.1",
+          "score": 0.13237,
+          "backend": "memory"
+        }
+      ],
+      "trace": [
+        {
+          "protocol": "MCP",
+          "tool": "search_knowledge",
+          "arguments": {
+            "query": "新生报到需要携带的材料",
+            "campus_id": null,
+            "as_of_date": "2026-09-05"
+          },
+          "status": "ok",
+          "latency_ms": 224.86
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 6407,
+        "completion_tokens": 339,
+        "total_tokens": 6746
+      },
+      "pending_actions": [],
+      "plan_id": null,
+      "model_mode": "live",
+      "created_at": 1789979299.317379,
+      "latency_ms": 5259.43
+    },
+    {
+      "id": "c540be95-a437-48d6-a73d-7289a8a60688",
+      "session_id": "62efb9dd-b5c2-4616-8abf-301a847bcf3f",
+      "message": "帮我安排报到和入住",
+      "status": "completed",
+      "reply": "在安排之前，我需要先确认几个关键条件——目前有几项信息缺失，我不能替你猜测。\n\n## 需要你确认的信息\n\n**1. 校区（必填）**\n明德（mingde）和致远（zhiyuan）两个校区的服务流程、地点、时间窗口都不同。你要去哪个校区？\n\n**2. 到校时间**\n你计划什么时候到校？这决定了日程从哪个时间点开始排。\n\n**3. 缴费状态**\n报到有前置依赖：必须先完成「缴费或绿色通道核验」，才能办理报到 [E-mingde-registration] [E-zhiyuan-registration]。\n- 你是否已经完成缴费/绿色通道核验？\n- 如果还没办，需要把「缴费」也排进日程。\n\n**4. 是否要办校园卡**\n校园卡办理（20分钟）也是报到后可办的项目，需要的话我一并排入。\n\n---\n\n## 顺带说明：你已有一份待办计划\n\n我查到你的待办里已存在一份**明德校区**的报到计划（plan_id `04d692c7...`，version 1），全部为 pending 状态：\n\n| 事项 | 时间 | 地点 |\n|---|---|---|\n| 缴费或绿色通道核验 | 09-05 14:15–14:45 | finance |\n| 新生报到 | 09-05 15:00–15:40 | gym |\n| 校园卡办理 | 09-07 09:00–09:20 | card_center |\n| 宿舍入住 | 09-07 09:35–10:05 | dormitory |\n\n请告诉我：\n- 你是想**沿用/修改这份明德计划**，还是**重新规划**（比如换到致远校区）？\n- 如果重新规划，请提供上面 1–4 项信息。\n\n另外提醒：这份计划目前只是**草案/待办**，尚未同步到外部日历。如需同步，我会单独生成一个待确认操作，由你确认后才会写入。\n\n（补充：外部日历我查询了 09-05 至 09-12 区间，未返回占用记录；但外部日历未连接或查询失败都不代表空闲，所以这不构成\"你这两天有空\"的结论。）",
+      "citations": [
+        "E-mingde-registration",
+        "E-zhiyuan-registration"
+      ],
+      "evidence": [
+        {
+          "evidence_id": "E-mingde-payment",
+          "text": "明德校区缴费或绿色通道核验。办理地点：finance。家庭经济困难的新生可申请绿色通道，先办理入学手续，再按要求提交资助材料。个人学费金额未在本资料中列明，应以缴费通知为准。\n所需材料：录取通知书、身份证、缴费记录或绿色通道申请材料。开放时间：工作日09:00—12:00、13:00—17:00；周六09:00—12:00、13:00—16:00；周日不开放。演示办理时长：30分钟。此数据为合成演示，不对应真实高校。",
+          "title": "明德校区 缴费或绿色通道核验",
+          "campus_id": "mingde",
+          "valid_from": "2026-01-01",
+          "valid_to": "2026-12-31",
+          "version": "demo-2026.1",
+          "source": "E-mingde-payment.md"
+        },
+        {
+          "evidence_id": "E-mingde-registration",
+          "text": "明德校区新生报到。办理地点：gym。先完成缴费或绿色通道核验，再到报到点办理入学登记。\n所需材料：录取通知书、身份证、缴费或绿色通道核验记录。开放时间：工作日09:00—12:00、13:00—17:00；周六09:00—12:00、13:00—16:00；周日不开放。演示办理时长：40分钟。此数据为合成演示，不对应真实高校。",
+          "title": "明德校区 新生报到",
+          "campus_id": "mingde",
+          "valid_from": "2026-01-01",
+          "valid_to": "2026-12-31",
+          "version": "demo-2026.1",
+          "source": "E-mingde-registration.md"
+        },
+        {
+          "evidence_id": "E-mingde-dorm",
+          "text": "明德校区宿舍入住。办理地点：dormitory。完成报到后，持报到凭证到宿舍服务台核验身份并领取钥匙。宿舍门禁为23:00，晚归需登记。\n所需材料：身份证、报到凭证。开放时间：每日09:00—21:00。演示办理时长：30分钟。此数据为合成演示，不对应真实高校。",
+          "title": "明德校区 宿舍入住",
+          "campus_id": "mingde",
+          "valid_from": "2026-01-01",
+          "valid_to": "2026-12-31",
+          "version": "demo-2026.1",
+          "source": "E-mingde-dorm.md"
+        },
+        {
+          "evidence_id": "E-mingde-card",
+          "text": "明德校区校园卡办理。办理地点：card_center。完成报到后可办理校园卡；遗失需及时挂失。\n所需材料：身份证、报到凭证。开放时间：工作日09:00—12:00、13:00—17:00；周六09:00—12:00、13:00—16:00；周日不开放。演示办理时长：20分钟。此数据为合成演示，不对应真实高校。",
+          "title": "明德校区 校园卡办理",
+          "campus_id": "mingde",
+          "valid_from": "2026-01-01",
+          "valid_to": "2026-12-31",
+          "version": "demo-2026.1",
+          "source": "E-mingde-card.md"
+        },
+        {
+          "evidence_id": "E-zhiyuan-payment",
+          "text": "致远校区缴费或绿色通道核验。办理地点：finance。家庭经济困难的新生可申请绿色通道，先办理入学手续，再按要求提交资助材料。个人学费金额未在本资料中列明，应以缴费通知为准。\n所需材料：录取通知书、身份证、缴费记录或绿色通道申请材料。开放时间：工作日09:00—12:00、13:00—17:00；周六09:00—12:00、13:00—16:00；周日不开放。演示办理时长：30分钟。此数据为合成演示，不对应真实高校。",
+          "title": "致远校区 缴费或绿色通道核验",
+          "campus_id": "zhiyuan",
+          "valid_from": "2026-01-01",
+          "valid_to": "2026-12-31",
+          "version": "demo-2026.1",
+          "source": "E-zhiyuan-payment.md"
+        },
+        {
+          "evidence_id": "E-zhiyuan-registration",
+          "text": "致远校区新生报到。办理地点：gym。先完成缴费或绿色通道核验，再到报到点办理入学登记。\n所需材料：录取通知书、身份证、缴费或绿色通道核验记录。开放时间：工作日09:00—12:00、13:00—17:00；周六09:00—12:00、13:00—16:00；周日不开放。演示办理时长：40分钟。此数据为合成演示，不对应真实高校。",
+          "title": "致远校区 新生报到",
+          "campus_id": "zhiyuan",
+          "valid_from": "2026-01-01",
+          "valid_to": "2026-12-31",
+          "version": "demo-2026.1",
+          "source": "E-zhiyuan-registration.md"
+        },
+        {
+          "evidence_id": "E-zhiyuan-dorm",
+          "text": "致远校区宿舍入住。办理地点：dormitory。完成报到后，持报到凭证到宿舍服务台核验身份并领取钥匙。宿舍门禁为23:00，晚归需登记。\n所需材料：身份证、报到凭证。开放时间：每日09:00—21:00。演示办理时长：30分钟。此数据为合成演示，不对应真实高校。",
+          "title": "致远校区 宿舍入住",
+          "campus_id": "zhiyuan",
+          "valid_from": "2026-01-01",
+          "valid_to": "2026-12-31",
+          "version": "demo-2026.1",
+          "source": "E-zhiyuan-dorm.md"
+        },
+        {
+          "evidence_id": "E-zhiyuan-card",
+          "text": "致远校区校园卡办理。办理地点：card_center。完成报到后可办理校园卡；遗失需及时挂失。\n所需材料：身份证、报到凭证。开放时间：工作日09:00—12:00、13:00—17:00；周六09:00—12:00、13:00—16:00；周日不开放。演示办理时长：20分钟。此数据为合成演示，不对应真实高校。",
+          "title": "致远校区 校园卡办理",
+          "campus_id": "zhiyuan",
+          "valid_from": "2026-01-01",
+          "valid_to": "2026-12-31",
+          "version": "demo-2026.1",
+          "source": "E-zhiyuan-card.md"
+        }
+      ],
+      "trace": [
+        {
+          "protocol": "MCP",
+          "tool": "get_service_info",
+          "arguments": {
+            "campus_id": "mingde",
+            "start_date": "2026-09-05",
+            "end_date": "2026-09-12"
+          },
+          "status": "ok",
+          "latency_ms": 104.34
+        },
+        {
+          "protocol": "MCP",
+          "tool": "get_service_info",
+          "arguments": {
+            "campus_id": "zhiyuan",
+            "start_date": "2026-09-05",
+            "end_date": "2026-09-12"
+          },
+          "status": "ok",
+          "latency_ms": 109.02
+        },
+        {
+          "protocol": "MCP",
+          "tool": "list_calendar_events",
+          "arguments": {
+            "start_date": "2026-09-05",
+            "end_date": "2026-09-12"
+          },
+          "status": "ok",
+          "latency_ms": 318.02
+        },
+        {
+          "protocol": "MCP",
+          "tool": "list_todos",
+          "arguments": {},
+          "status": "ok",
+          "latency_ms": 228.79
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 13052,
+        "completion_tokens": 772,
+        "total_tokens": 13824
+      },
+      "pending_actions": [],
+      "plan_id": null,
+      "model_mode": "live",
+      "created_at": 1789979305.231732,
+      "latency_ms": 5986.54
+    },
+    {
+      "id": "3d5e818a-09a6-449c-95f5-da98b6cf75d6",
+      "session_id": "62efb9dd-b5c2-4616-8abf-301a847bcf3f",
+      "message": "周六下午两点到明德校区，还没有缴费。",
+      "status": "completed",
+      "reply": "入学计划已生成，尚未保存：\n- 09-07 10:25—10:55 缴费或绿色通道核验（finance） [E-mingde-payment]\n- 09-07 11:10—11:50 新生报到（gym） [E-mingde-registration]\n- 09-07 12:05—12:35 宿舍入住（dormitory） [E-mingde-dorm]\n\n这份计划把三项事务按依赖顺序串起来：先缴费或绿色通道核验，再新生报到，最后宿舍入住。原请求是周六（2026-09-05）下午14:00到校，但缴费、报到窗口周六13:00—16:00开放，宿舍入住每日09:00—21:00开放；计划实际安排到了2026-09-07（周一）上午，说明周六下午到校后未能排入当天窗口，顺延到了下一个工作日。未安排校园卡办理，因为本次请求只列了缴费、报到、宿舍入住三项服务，校园卡不在依赖链上。\n请查看计划和材料清单，确认后再保存。",
+      "citations": [
+        "E-mingde-payment",
+        "E-mingde-registration",
+        "E-mingde-dorm"
+      ],
+      "evidence": [
+        {
+          "evidence_id": "E-mingde-payment",
+          "text": "标题：明德校区 缴费或绿色通道核验\n明德校区缴费或绿色通道核验。办理地点：finance。家庭经济困难的新生可申请绿色通道，先办理入学手续，再按要求提交资助材料。个人学费金额未在本资料中列明，应以缴费通知为准。\n所需材料：录取通知书、身份证、缴费记录或绿色通道申请材料。开放时间：工作日09:00—12:00、13:00—17:00；周六09:00—12:00、13:00—16:00；周日不开放。演示办理时长：30分钟。此数据为合成演示，不对应真实高校。",
+          "source": "E-mingde-payment.md",
+          "title": "明德校区 缴费或绿色通道核验",
+          "campus_id": "mingde",
+          "valid_from": "2026-01-01",
+          "valid_to": "2026-12-31",
+          "version": "demo-2026.1",
+          "score": 0.441099,
+          "backend": "memory"
+        },
+        {
+          "evidence_id": "E-mingde-registration",
+          "text": "标题：明德校区 新生报到\n明德校区新生报到。办理地点：gym。先完成缴费或绿色通道核验，再到报到点办理入学登记。\n所需材料：录取通知书、身份证、缴费或绿色通道核验记录。开放时间：工作日09:00—12:00、13:00—17:00；周六09:00—12:00、13:00—16:00；周日不开放。演示办理时长：40分钟。此数据为合成演示，不对应真实高校。",
+          "source": "E-mingde-registration.md",
+          "title": "明德校区 新生报到",
+          "campus_id": "mingde",
+          "valid_from": "2026-01-01",
+          "valid_to": "2026-12-31",
+          "version": "demo-2026.1",
+          "score": 0.665169,
+          "backend": "memory"
+        },
+        {
+          "evidence_id": "E-mingde-dorm",
+          "text": "标题：明德校区 宿舍入住\n明德校区宿舍入住。办理地点：dormitory。完成报到后，持报到凭证到宿舍服务台核验身份并领取钥匙。宿舍门禁为23:00，晚归需登记。\n所需材料：身份证、报到凭证。开放时间：每日09:00—21:00。演示办理时长：30分钟。此数据为合成演示，不对应真实高校。",
+          "source": "E-mingde-dorm.md",
+          "title": "明德校区 宿舍入住",
+          "campus_id": "mingde",
+          "valid_from": "2026-01-01",
+          "valid_to": "2026-12-31",
+          "version": "demo-2026.1",
+          "score": 0.378544,
+          "backend": "memory"
+        },
+        {
+          "evidence_id": "E-mingde-card",
+          "text": "标题：明德校区 校园卡办理\n明德校区校园卡办理。办理地点：card_center。完成报到后可办理校园卡；遗失需及时挂失。\n所需材料：身份证、报到凭证。开放时间：工作日09:00—12:00、13:00—17:00；周六09:00—12:00、13:00—16:00；周日不开放。演示办理时长：20分钟。此数据为合成演示，不对应真实高校。",
+          "source": "E-mingde-card.md",
+          "title": "明德校区 校园卡办理",
+          "campus_id": "mingde",
+          "valid_from": "2026-01-01",
+          "valid_to": "2026-12-31",
+          "version": "demo-2026.1",
+          "score": 0.143153,
+          "backend": "memory"
+        }
+      ],
+      "trace": [
+        {
+          "protocol": "A2A",
+          "task_id": "fadb7d5c-761f-4cf3-9d53-651480c4c761",
+          "state": "submitted"
+        },
+        {
+          "protocol": "A2A",
+          "task_id": "fadb7d5c-761f-4cf3-9d53-651480c4c761",
+          "state": "working"
+        },
+        {
+          "protocol": "A2A",
+          "task_id": "fadb7d5c-761f-4cf3-9d53-651480c4c761",
+          "state": "completed"
+        },
+        {
+          "protocol": "MCP",
+          "tool": "get_service_info",
+          "arguments": {
+            "campus_id": "mingde",
+            "service_ids": [
+              "payment",
+              "registration",
+              "dorm"
+            ],
+            "start_date": "2026-09-05",
+            "end_date": "2026-09-12"
+          },
+          "status": "ok",
+          "latency_ms": 232.21
+        },
+        {
+          "protocol": "MCP",
+          "tool": "get_travel_times",
+          "arguments": {
+            "campus_id": "mingde"
+          },
+          "status": "ok",
+          "latency_ms": 105.07
+        },
+        {
+          "protocol": "MCP",
+          "tool": "get_service_info",
+          "arguments": {
+            "campus_id": "mingde",
+            "start_date": "2026-09-05",
+            "end_date": "2026-09-12"
+          },
+          "status": "ok",
+          "latency_ms": 304.9
+        },
+        {
+          "protocol": "MCP",
+          "tool": "get_travel_times",
+          "arguments": {
+            "campus_id": "mingde"
+          },
+          "status": "ok",
+          "latency_ms": 104.8
+        },
+        {
+          "protocol": "MCP",
+          "tool": "list_calendar_events",
+          "arguments": {
+            "start_date": "2026-09-05",
+            "end_date": "2026-09-12",
+            "exclude_plan_id": null
+          },
+          "status": "ok",
+          "latency_ms": 289.57
+        },
+        {
+          "protocol": "MCP",
+          "tool": "search_knowledge",
+          "arguments": {
+            "query": "明德校区新生报到与入住安排。学生周六（2026-09-05）下午14:00到校，尚未缴费，需先办理缴费或绿色通道核验，再办理新生报到，之后办理宿舍入住。请按依赖顺序安排，并考虑各服务开放时间窗口。",
+            "campus_id": "mingde",
+            "as_of_date": "2026-09-05",
+            "top_k": 5
+          },
+          "status": "ok",
+          "latency_ms": 101.17
+        },
+        {
+          "protocol": "A2A",
+          "task_id": "fadb7d5c-761f-4cf3-9d53-651480c4c761",
+          "operation": "artifact_received",
+          "latency_ms": 9753.32
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 15503,
+        "completion_tokens": 944,
+        "total_tokens": 16447
+      },
+      "pending_actions": [
+        "b863517f-34ac-42f2-8889-f98415e1ebcc"
+      ],
+      "plan_id": "1b885c09-4477-49a8-97d6-490175ed8fab",
+      "model_mode": "live",
+      "created_at": 1789979311.8380165,
+      "a2a_task_id": "fadb7d5c-761f-4cf3-9d53-651480c4c761",
+      "latency_ms": 12412.72
+    },
+    {
+      "confirmation": {
+        "ok": true,
+        "data": {
+          "plan_id": "1b885c09-4477-49a8-97d6-490175ed8fab",
+          "version": 1,
+          "todos_created": 3,
+          "events_created": 3
+        },
+        "error": null
+      }
+    },
+    {
+      "duplicate_confirmation": {
+        "ok": true,
+        "data": {
+          "plan_id": "1b885c09-4477-49a8-97d6-490175ed8fab",
+          "version": 1,
+          "todos_created": 3,
+          "events_created": 3
+        },
+        "error": null
+      }
+    }
+  ]
+}

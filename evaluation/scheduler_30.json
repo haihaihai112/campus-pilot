@@ -1,0 +1,482 @@
+[
+  {
+    "id": "eval-mingde-9-standard",
+    "category": "standard",
+    "request": {
+      "session_id": "eval-mingde-9-standard",
+      "request": "安排报到和入住",
+      "campus_id": "mingde",
+      "arrival": "2026-09-05T09:00:00+08:00"
+    },
+    "events": [],
+    "expected": "valid_schedule"
+  },
+  {
+    "id": "eval-mingde-9-busy",
+    "category": "busy",
+    "request": {
+      "session_id": "eval-mingde-9-busy",
+      "request": "安排报到和入住",
+      "campus_id": "mingde",
+      "arrival": "2026-09-05T09:00:00+08:00"
+    },
+    "events": [
+      {
+        "start": "2026-09-05T09:00:00+08:00",
+        "end": "2026-09-05T10:00:00+08:00",
+        "location": "gym"
+      }
+    ],
+    "expected": "valid_schedule"
+  },
+  {
+    "id": "eval-mingde-9-restricted",
+    "category": "restricted",
+    "request": {
+      "session_id": "eval-mingde-9-restricted",
+      "request": "安排报到和入住",
+      "campus_id": "mingde",
+      "arrival": "2026-09-05T09:00:00+08:00",
+      "available_windows": [
+        [
+          "2026-09-05T09:00:00+08:00",
+          "2026-09-05T09:10:00+08:00"
+        ]
+      ]
+    },
+    "events": [],
+    "expected": "empty_with_reasons"
+  },
+  {
+    "id": "eval-mingde-11-standard",
+    "category": "standard",
+    "request": {
+      "session_id": "eval-mingde-11-standard",
+      "request": "安排报到和入住",
+      "campus_id": "mingde",
+      "arrival": "2026-09-05T11:00:00+08:00"
+    },
+    "events": [],
+    "expected": "valid_schedule"
+  },
+  {
+    "id": "eval-mingde-11-busy",
+    "category": "busy",
+    "request": {
+      "session_id": "eval-mingde-11-busy",
+      "request": "安排报到和入住",
+      "campus_id": "mingde",
+      "arrival": "2026-09-05T11:00:00+08:00"
+    },
+    "events": [
+      {
+        "start": "2026-09-05T11:00:00+08:00",
+        "end": "2026-09-05T12:00:00+08:00",
+        "location": "gym"
+      }
+    ],
+    "expected": "valid_schedule"
+  },
+  {
+    "id": "eval-mingde-11-restricted",
+    "category": "restricted",
+    "request": {
+      "session_id": "eval-mingde-11-restricted",
+      "request": "安排报到和入住",
+      "campus_id": "mingde",
+      "arrival": "2026-09-05T11:00:00+08:00",
+      "available_windows": [
+        [
+          "2026-09-05T11:00:00+08:00",
+          "2026-09-05T11:10:00+08:00"
+        ]
+      ]
+    },
+    "events": [],
+    "expected": "empty_with_reasons"
+  },
+  {
+    "id": "eval-mingde-14-standard",
+    "category": "standard",
+    "request": {
+      "session_id": "eval-mingde-14-standard",
+      "request": "安排报到和入住",
+      "campus_id": "mingde",
+      "arrival": "2026-09-05T14:00:00+08:00"
+    },
+    "events": [],
+    "expected": "valid_schedule"
+  },
+  {
+    "id": "eval-mingde-14-busy",
+    "category": "busy",
+    "request": {
+      "session_id": "eval-mingde-14-busy",
+      "request": "安排报到和入住",
+      "campus_id": "mingde",
+      "arrival": "2026-09-05T14:00:00+08:00"
+    },
+    "events": [
+      {
+        "start": "2026-09-05T14:00:00+08:00",
+        "end": "2026-09-05T15:00:00+08:00",
+        "location": "gym"
+      }
+    ],
+    "expected": "valid_schedule"
+  },
+  {
+    "id": "eval-mingde-14-restricted",
+    "category": "restricted",
+    "request": {
+      "session_id": "eval-mingde-14-restricted",
+      "request": "安排报到和入住",
+      "campus_id": "mingde",
+      "arrival": "2026-09-05T14:00:00+08:00",
+      "available_windows": [
+        [
+          "2026-09-05T14:00:00+08:00",
+          "2026-09-05T14:10:00+08:00"
+        ]
+      ]
+    },
+    "events": [],
+    "expected": "empty_with_reasons"
+  },
+  {
+    "id": "eval-mingde-16-standard",
+    "category": "standard",
+    "request": {
+      "session_id": "eval-mingde-16-standard",
+      "request": "安排报到和入住",
+      "campus_id": "mingde",
+      "arrival": "2026-09-05T16:00:00+08:00"
+    },
+    "events": [],
+    "expected": "valid_schedule"
+  },
+  {
+    "id": "eval-mingde-16-busy",
+    "category": "busy",
+    "request": {
+      "session_id": "eval-mingde-16-busy",
+      "request": "安排报到和入住",
+      "campus_id": "mingde",
+      "arrival": "2026-09-05T16:00:00+08:00"
+    },
+    "events": [
+      {
+        "start": "2026-09-05T16:00:00+08:00",
+        "end": "2026-09-05T17:00:00+08:00",
+        "location": "gym"
+      }
+    ],
+    "expected": "valid_schedule"
+  },
+  {
+    "id": "eval-mingde-16-restricted",
+    "category": "restricted",
+    "request": {
+      "session_id": "eval-mingde-16-restricted",
+      "request": "安排报到和入住",
+      "campus_id": "mingde",
+      "arrival": "2026-09-05T16:00:00+08:00",
+      "available_windows": [
+        [
+          "2026-09-05T16:00:00+08:00",
+          "2026-09-05T16:10:00+08:00"
+        ]
+      ]
+    },
+    "events": [],
+    "expected": "empty_with_reasons"
+  },
+  {
+    "id": "eval-mingde-18-standard",
+    "category": "standard",
+    "request": {
+      "session_id": "eval-mingde-18-standard",
+      "request": "安排报到和入住",
+      "campus_id": "mingde",
+      "arrival": "2026-09-05T18:00:00+08:00"
+    },
+    "events": [],
+    "expected": "valid_schedule"
+  },
+  {
+    "id": "eval-mingde-18-busy",
+    "category": "busy",
+    "request": {
+      "session_id": "eval-mingde-18-busy",
+      "request": "安排报到和入住",
+      "campus_id": "mingde",
+      "arrival": "2026-09-05T18:00:00+08:00"
+    },
+    "events": [
+      {
+        "start": "2026-09-05T18:00:00+08:00",
+        "end": "2026-09-05T19:00:00+08:00",
+        "location": "gym"
+      }
+    ],
+    "expected": "valid_schedule"
+  },
+  {
+    "id": "eval-mingde-18-restricted",
+    "category": "restricted",
+    "request": {
+      "session_id": "eval-mingde-18-restricted",
+      "request": "安排报到和入住",
+      "campus_id": "mingde",
+      "arrival": "2026-09-05T18:00:00+08:00",
+      "available_windows": [
+        [
+          "2026-09-05T18:00:00+08:00",
+          "2026-09-05T18:10:00+08:00"
+        ]
+      ]
+    },
+    "events": [],
+    "expected": "empty_with_reasons"
+  },
+  {
+    "id": "eval-zhiyuan-9-standard",
+    "category": "standard",
+    "request": {
+      "session_id": "eval-zhiyuan-9-standard",
+      "request": "安排报到和入住",
+      "campus_id": "zhiyuan",
+      "arrival": "2026-09-05T09:00:00+08:00"
+    },
+    "events": [],
+    "expected": "valid_schedule"
+  },
+  {
+    "id": "eval-zhiyuan-9-busy",
+    "category": "busy",
+    "request": {
+      "session_id": "eval-zhiyuan-9-busy",
+      "request": "安排报到和入住",
+      "campus_id": "zhiyuan",
+      "arrival": "2026-09-05T09:00:00+08:00"
+    },
+    "events": [
+      {
+        "start": "2026-09-05T09:00:00+08:00",
+        "end": "2026-09-05T10:00:00+08:00",
+        "location": "gym"
+      }
+    ],
+    "expected": "valid_schedule"
+  },
+  {
+    "id": "eval-zhiyuan-9-restricted",
+    "category": "restricted",
+    "request": {
+      "session_id": "eval-zhiyuan-9-restricted",
+      "request": "安排报到和入住",
+      "campus_id": "zhiyuan",
+      "arrival": "2026-09-05T09:00:00+08:00",
+      "available_windows": [
+        [
+          "2026-09-05T09:00:00+08:00",
+          "2026-09-05T09:10:00+08:00"
+        ]
+      ]
+    },
+    "events": [],
+    "expected": "empty_with_reasons"
+  },
+  {
+    "id": "eval-zhiyuan-11-standard",
+    "category": "standard",
+    "request": {
+      "session_id": "eval-zhiyuan-11-standard",
+      "request": "安排报到和入住",
+      "campus_id": "zhiyuan",
+      "arrival": "2026-09-05T11:00:00+08:00"
+    },
+    "events": [],
+    "expected": "valid_schedule"
+  },
+  {
+    "id": "eval-zhiyuan-11-busy",
+    "category": "busy",
+    "request": {
+      "session_id": "eval-zhiyuan-11-busy",
+      "request": "安排报到和入住",
+      "campus_id": "zhiyuan",
+      "arrival": "2026-09-05T11:00:00+08:00"
+    },
+    "events": [
+      {
+        "start": "2026-09-05T11:00:00+08:00",
+        "end": "2026-09-05T12:00:00+08:00",
+        "location": "gym"
+      }
+    ],
+    "expected": "valid_schedule"
+  },
+  {
+    "id": "eval-zhiyuan-11-restricted",
+    "category": "restricted",
+    "request": {
+      "session_id": "eval-zhiyuan-11-restricted",
+      "request": "安排报到和入住",
+      "campus_id": "zhiyuan",
+      "arrival": "2026-09-05T11:00:00+08:00",
+      "available_windows": [
+        [
+          "2026-09-05T11:00:00+08:00",
+          "2026-09-05T11:10:00+08:00"
+        ]
+      ]
+    },
+    "events": [],
+    "expected": "empty_with_reasons"
+  },
+  {
+    "id": "eval-zhiyuan-14-standard",
+    "category": "standard",
+    "request": {
+      "session_id": "eval-zhiyuan-14-standard",
+      "request": "安排报到和入住",
+      "campus_id": "zhiyuan",
+      "arrival": "2026-09-05T14:00:00+08:00"
+    },
+    "events": [],
+    "expected": "valid_schedule"
+  },
+  {
+    "id": "eval-zhiyuan-14-busy",
+    "category": "busy",
+    "request": {
+      "session_id": "eval-zhiyuan-14-busy",
+      "request": "安排报到和入住",
+      "campus_id": "zhiyuan",
+      "arrival": "2026-09-05T14:00:00+08:00"
+    },
+    "events": [
+      {
+        "start": "2026-09-05T14:00:00+08:00",
+        "end": "2026-09-05T15:00:00+08:00",
+        "location": "gym"
+      }
+    ],
+    "expected": "valid_schedule"
+  },
+  {
+    "id": "eval-zhiyuan-14-restricted",
+    "category": "restricted",
+    "request": {
+      "session_id": "eval-zhiyuan-14-restricted",
+      "request": "安排报到和入住",
+      "campus_id": "zhiyuan",
+      "arrival": "2026-09-05T14:00:00+08:00",
+      "available_windows": [
+        [
+          "2026-09-05T14:00:00+08:00",
+          "2026-09-05T14:10:00+08:00"
+        ]
+      ]
+    },
+    "events": [],
+    "expected": "empty_with_reasons"
+  },
+  {
+    "id": "eval-zhiyuan-16-standard",
+    "category": "standard",
+    "request": {
+      "session_id": "eval-zhiyuan-16-standard",
+      "request": "安排报到和入住",
+      "campus_id": "zhiyuan",
+      "arrival": "2026-09-05T16:00:00+08:00"
+    },
+    "events": [],
+    "expected": "valid_schedule"
+  },
+  {
+    "id": "eval-zhiyuan-16-busy",
+    "category": "busy",
+    "request": {
+      "session_id": "eval-zhiyuan-16-busy",
+      "request": "安排报到和入住",
+      "campus_id": "zhiyuan",
+      "arrival": "2026-09-05T16:00:00+08:00"
+    },
+    "events": [
+      {
+        "start": "2026-09-05T16:00:00+08:00",
+        "end": "2026-09-05T17:00:00+08:00",
+        "location": "gym"
+      }
+    ],
+    "expected": "valid_schedule"
+  },
+  {
+    "id": "eval-zhiyuan-16-restricted",
+    "category": "restricted",
+    "request": {
+      "session_id": "eval-zhiyuan-16-restricted",
+      "request": "安排报到和入住",
+      "campus_id": "zhiyuan",
+      "arrival": "2026-09-05T16:00:00+08:00",
+      "available_windows": [
+        [
+          "2026-09-05T16:00:00+08:00",
+          "2026-09-05T16:10:00+08:00"
+        ]
+      ]
+    },
+    "events": [],
+    "expected": "empty_with_reasons"
+  },
+  {
+    "id": "eval-zhiyuan-18-standard",
+    "category": "standard",
+    "request": {
+      "session_id": "eval-zhiyuan-18-standard",
+      "request": "安排报到和入住",
+      "campus_id": "zhiyuan",
+      "arrival": "2026-09-05T18:00:00+08:00"
+    },
+    "events": [],
+    "expected": "valid_schedule"
+  },
+  {
+    "id": "eval-zhiyuan-18-busy",
+    "category": "busy",
+    "request": {
+      "session_id": "eval-zhiyuan-18-busy",
+      "request": "安排报到和入住",
+      "campus_id": "zhiyuan",
+      "arrival": "2026-09-05T18:00:00+08:00"
+    },
+    "events": [
+      {
+        "start": "2026-09-05T18:00:00+08:00",
+        "end": "2026-09-05T19:00:00+08:00",
+        "location": "gym"
+      }
+    ],
+    "expected": "valid_schedule"
+  },
+  {
+    "id": "eval-zhiyuan-18-restricted",
+    "category": "restricted",
+    "request": {
+      "session_id": "eval-zhiyuan-18-restricted",
+      "request": "安排报到和入住",
+      "campus_id": "zhiyuan",
+      "arrival": "2026-09-05T18:00:00+08:00",
+      "available_windows": [
+        [
+          "2026-09-05T18:00:00+08:00",
+          "2026-09-05T18:10:00+08:00"
+        ]
+      ]
+    },
+    "events": [],
+    "expected": "empty_with_reasons"
+  }
+]

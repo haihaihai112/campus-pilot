@@ -1,0 +1,53 @@
+{
+  "product": "CampusPilot",
+  "version": "0.2.0",
+  "report_date": "2026-10-11",
+  "python": "3.11.16",
+  "dependencies": {
+    "campus-pilot": "0.2.0",
+    "mcp": "1.30.0",
+    "a2a-sdk": "0.3.26",
+    "langgraph": "1.2.11",
+    "fastapi": "0.141.1",
+    "gradio": "5.50.0"
+  },
+  "final_tests": {
+    "tests": 75,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 91.758
+  },
+  "final_test_file": "campuspilot-tests-2026-10-11-verified.xml",
+  "baseline_unchanged_files": 76,
+  "changed_baseline_paths": [
+    ".dockerignore",
+    ".env.example",
+    ".gitignore",
+    "docker-compose.yml",
+    "pyproject.toml",
+    "README.md",
+    "requirements.lock.txt",
+    "uv.lock",
+    "docs/INTERFACES.md",
+    "scripts/evaluate_live.py",
+    "scripts/package.py",
+    "tests/conftest.py",
+    "src/campus_agent/api.py",
+    "src/campus_agent/assistant.py",
+    "src/campus_agent/campus.py",
+    "src/campus_agent/cli.py",
+    "src/campus_agent/config.py",
+    "src/campus_agent/llm.py",
+    "src/campus_agent/planner.py",
+    "src/campus_agent/ui.py"
+  ],
+  "paid_model_calls": 0,
+  "real_users_measured": false,
+  "fixture_smoke": "campuspilot-smoke-2026-10-11.json",
+  "ruff": "passed",
+  "lock_check": "passed",
+  "compose_config": "passed",
+  "docker_build_and_run": "not tested",
+  "live_model_retest": "not performed"
+}

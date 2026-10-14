@@ -1,0 +1,342 @@
+{
+  "profile": "whut-2026",
+  "dataset_revision": "whut-2026-20261011-r2",
+  "school_id": "whut",
+  "school_name": "武汉理工大学",
+  "student_type": "undergraduate",
+  "cohort_year": 2026,
+  "fetched_at": "2026-10-11",
+  "synthetic": false,
+  "campuses": {
+    "whut": "武汉理工大学（个人报到校区待核实）",
+    "mafangshan": "马房山校区",
+    "yujiatou": "余家头校区",
+    "nanhu": "南湖校区"
+  },
+  "documents": [
+    {
+      "evidence_id": "E-whut-2026-registration",
+      "text": "## 新生报到注意事项\n\n（一）2026年我校本科新生报到采取网上迎新系统自助报到形式，请新生在指定时间内登录武汉理工大学网上迎新系统http://welcome.whut.edu.cn选择本科新生报到，按提示和要求完成相关报到程序。请新生在《录取通知书》规定的报到日期到校，同时请携带录取通知书、高考准考证、身份证等材料备查。因故确不能按期到校者，须向学校招生办公室请假（联系电话027-87859017，87858399）。无故逾期2周未报到者，将被视为自行放弃入学资格。\n\n（二）学校以学院为单位为每位新生安排有学生志愿者，志愿者信息将在网上迎新系统中显示。新生在入学前可与志愿者进行联系，志愿者将为新生解答疑惑，并提供入学服务，包括入住宿舍、领取校园卡、签收订购物品等，请新生在网上迎新系统中准确填写个人联系方式，并保持联系方式畅通，同时记录志愿者姓名及联系方式，便于与志愿者联系。\n\n（三）办理党员组织关系转接的同学，请务必保管好相关资料，入学之后，主动亮明党员身份，以班级为单位交至所在学院党委。\n\n1.党员组织关系原则上通过线上系统办理转接。湖北省外新生党员通过“全国党员管理信息系统”办理，湖北省内新生党员通过“湖北党建平台（党员之家）”办理，转入党组织搜索“中共武汉理工大学\\*\\*学院委员会”。其中，“\\*\\*学院”为拟录取学院名称。\n\n2.个别无法通过线上系统办理党员组织关系转接的，须携带纸质版《中国共产党党员组织关系介绍信》。介绍信抬头填写“中共武汉理工大学委员会组织部”，去往单位填写“武汉理工大学\\*\\*学院党委”，报到时交至学院党委组织员或辅导员集中办理。\n\n3.入党申请人（含入党积极分子、发展对象）应在入校手续办理完成后2周内将相关培养考察材料提交所在学院党组织审核，经审核认定后接续培养。\n\n（四）办理团组织关系转接的团员（含保留团籍的中共党员），请务必保管好团组织关系转接材料，入学报到后以班级团支部为单位上交学院（书院）团委、团总支。其中，团员证应信息记录齐全，在办理线下转入手续盖章后由个人妥善保管。\n\n1.团员须准备好团员证、团员档案（须含入团志愿书）、团组织关系转接介绍信（需依据转出组织是否开具）等团组织关系转接材料。其中，“介绍信”（纸质）抬头填写“共青团武汉理工大学委员会”。\n\n2.团员须登录“理工青年智能管理系统”录入政治面貌、入团时间、发展团员编号、入团志愿书状态、团员证状态等团员基本信息。\n\n3.9月30日前，由学院（书院）团委、团总支认定团员身份，认定成功的全体团员须通过“智慧团建”系统办理线上团组织关系转接，转入单位为【\\*\\*学院（书院）团委2026级本科生临时团支部】，可由原学校或本人发起转接。\n\n（五）自带档案的新生报到后将档案材料直接交给所在学院，由学院集中整理后移交档案馆。\n\n（六）根据中国铁路总公司规定，新生来校时可凭《录取通知书》购买一次从家庭所在地到武汉的普通旅客列车硬座、硬卧或动车组列车二等座、一等座及卧铺优惠车票，具体优惠政策以铁路部门规定为准，请在旅途中注意人身与财产安全。",
+      "title": "新生报到注意事项-迎新网站",
+      "source": "whut-2026-registration.md",
+      "campus_id": "whut",
+      "school_id": "whut",
+      "student_type": "undergraduate",
+      "cohort_year": 2026,
+      "valid_from": "2026-01-01",
+      "valid_to": "2026-12-31",
+      "version": "whut-2026-snapshot-20261011",
+      "source_url": "https://welcome.whut.edu.cn/info/1061/1161.htm",
+      "snapshot_sha256": "0aa167ed2965ec9d4821c9270cac71b9fc7b30538fc2935b3fbfa2da59e8c5a1",
+      "fetched_at": "2026-10-11",
+      "source_notes": [
+        "仅适用于2026级本科生；来源快照不代表政策持续有效，个人通知优先。",
+        "网页description仍含2025字样，正文明确2026；本资料以正文为准并保留差异。"
+      ]
+    },
+    {
+      "evidence_id": "E-whut-2026-fees",
+      "text": "## 新生收费项目及标准\n\n**一、** **学费住宿费**\n\n1.全日制本科学费标准\n\n[图片内容未转录，不能据此回答表格或路线信息]\n\n2.住宿费标准\n\n我校新生住宿费收费标准区间为880元/年至1440元/年，具体住宿费标准根据新生住宿安排情况确定。\n\n**二、代收费**\n\n1.健康检查费按照“武价费\\[2006\\]23号”“武发改规\\[2017\\]2号”“鄂教体艺\\[2018\\]1号”文件规定标准执行，按照89元/人收取。\n\n2.大学生城乡居民基本医疗保险将按最新文件执行。\n\n**三、特别说明**\n\n1.根据国家和湖北省相关政策规定，我校全日制本科生(中外合作办学项目学生除外)实行学分制收费，本科生学费=专业学费+学分学费。\n\n如2026年国家和湖北省相关政策有变，我校将按相关政策执行。\n\n2.校园一卡通预存的伙食费100元(为方便新生入学就餐需要,预存100元伙食费至学生本人的校园卡)。",
+      "title": "新生收费项目及标准-迎新网站",
+      "source": "whut-2026-fees.md",
+      "campus_id": "whut",
+      "school_id": "whut",
+      "student_type": "undergraduate",
+      "cohort_year": 2026,
+      "valid_from": "2026-01-01",
+      "valid_to": "2026-12-31",
+      "version": "whut-2026-snapshot-20261011",
+      "source_url": "https://welcome.whut.edu.cn/info/1061/1121.htm",
+      "snapshot_sha256": "587ddb25366d86b71b3c64e799fc70025425843e1c5e323879359c5087f92191",
+      "fetched_at": "2026-10-11",
+      "source_notes": [
+        "仅适用于2026级本科生；来源快照不代表政策持续有效，个人通知优先。",
+        "年份依据本科入口及页面2026标识；不得推及2027年或研究生。",
+        "专业学费表为图片未转录；医保按最新文件，个人总费用未知。"
+      ]
+    },
+    {
+      "evidence_id": "E-whut-2026-green",
+      "text": "## 新生入学“绿色通道”介绍\n\n为保障家庭经济困难新生顺利入学，学校专设“绿色通道”。对被录取入学的家庭经济困难新生， **如暂时筹集不齐学费和住宿费，** 只要持有“生源地信用助学贷款”合同和回执单，或者预办理校园地国家助学贷款，持有手填的《家庭经济困难学生认定申请表》（随录取通知书发放），报到时我校一律先办理入学手续，后期根据学生具体情况开展困难认定，采取不同措施予以资助。\n\n国家助学贷款是由政府主导，金融机构向高校家庭经济困难学生提供的信用贷款，优先用于支付在校期间学费和住宿费，超出部分可用于弥补日常生活费，每人每年最高不超过20000元，在校期间利息由国家承担。国家助学贷款分为生源地信用助学贷款和校园地国家助学贷款。\n\n**一、生源地信用助学贷款**\n\n生源地信用助学贷款是指国家开发银行等金融机构向符合条件的家庭经济困难普通高校新生和在校生（以下简称学生）发放的、学生和家长（或其他法定监护人）在学生入学前户籍所在县（市、区）的学生资助管理中心或金融机构申请办理的助学贷款。生源地信用助学贷款为信用贷款，不需要担保或抵押，学生和家长（或其他法定监护人）为共同借款人，共同承担还款责任。\n\n生源地信用助学贷款按年度申请、审批和发放。贷款学生在校期间利息全部由财政补贴，毕业后利息由学生和家长（或其他法定监护人）共同负担。贷款利率按中国人民银行公布的同档次基准利率执行。\n\n同时符合以下条件的学生可申请生源地信用助学贷款：\n\n1.具有中华人民共和国国籍；\n\n2.诚实守信，遵纪守法；\n\n3.已被我校全日制普通本科专业正式录取的新生或在我校就读的学生；\n\n4.学生本人入学前户籍、其父母（或其他法定监护人）户籍均在本县（市、区）；\n\n5.家庭经济困难，所能获得的收入不足以支付在校期间完成学业所需的基本费用。\n\n办理生源地信用贷款的具体流程可以咨询当地县（市）教育局相关资助部门。\n\n**二、校园地国家助学贷款**\n\n校园地国家助学贷款是由政府主导、财政贴息，银行、教育行政部门与高校共同操作的，帮助高校家庭经济困难学生支付在校期间所需学费和住宿费的助学贷款。学生到校报到后，可通过学校向金融机构申请办理国家助学贷款。学生在校期间利息由国家财政补贴，毕业后利息由个人承担。\n\n申请者为我校在读全日制普通本科生（含第二学士学位、预科生）和研究生，具备以下条件：\n\n1.具有中华人民共和国国籍，且持有中华人民共和国居民身份证；\n\n2.具有完全的民事行为能力（未成年人须有其法定监护人书面意见）；\n\n3.诚实守信、遵纪守法，无违法违纪行为；\n\n4.品德优良、学习刻苦、能够正常完成学业；\n\n5.家庭经济困难，本人及其家庭所获得的收入不足以支付在校期间完成学业所需的基本费用；\n\n6.诚实守信，能严格执行贷款协议，无不良信用行为。\n\n需办理国家助学贷款的新生必须在入学前准备好以下材料：\n\n1.《家庭经济困难学生认定申请表》；\n\n2.学生本人身份证复印件；\n\n3.未成年学生（未满18周岁）办理国家助学贷款需提供法定监护人（如父母双方）的有效身份证复印件及书面同意贷款申请。\n\n**一个学生同一学年内只能选择校园地国家助学贷款或生源地信用助学贷款其中之一。**\n\n“绿色通道”仅仅是新生资助工作的开始，新生报到后，学校将马上启动新生家庭经济困难认定工作，为本学年落实各项资助措施做好准备。在新生家庭经济困难认定的基础上，开展国家助学金评审和新增国家助学贷款工作。学校稳步推进国家助学贷款工作，能够满足学生的贷款需求，实现应贷尽贷。学校每年提供2000余个校内勤工助学岗位，军训结束之后，针对新生举办勤工助学专场招聘会，保证特困学生上岗工作。学校将通过“奖、贷、助、勤、补、减”六位一体的资助体系，密切关注困难学生群体的学习和生活，切实解决家庭经济困难学生的后顾之忧，全力保障家庭经济困难学生顺利完成学业。[图片内容未转录，不能据此回答表格或路线信息]\n\n**学校暑期资助咨询热线：（** **027** **）** **87658189**",
+      "title": "新生入学“绿色通道”介绍-迎新网站",
+      "source": "whut-2026-green.md",
+      "campus_id": "whut",
+      "school_id": "whut",
+      "student_type": "undergraduate",
+      "cohort_year": 2026,
+      "valid_from": "2026-01-01",
+      "valid_to": "2026-12-31",
+      "version": "whut-2026-snapshot-20261011",
+      "source_url": "https://welcome.whut.edu.cn/info/1061/1151.htm",
+      "snapshot_sha256": "e28d07f95cf45ffa9e9c1e1348e164f8f94c31eaeeaaee208cbe054ac352c1d3",
+      "fetched_at": "2026-10-11",
+      "source_notes": [
+        "仅适用于2026级本科生；来源快照不代表政策持续有效，个人通知优先。",
+        "年份依据本科入口及页面2026标识；不得推及2027年或研究生。"
+      ]
+    },
+    {
+      "evidence_id": "E-whut-2026-timeline",
+      "text": "## 2026迎新事项\n\n请按以下时间节点完成各事项\n\n018月30日/31日\n\n本科新生网上报到\n\n028月31日\n\n进入“理工智课”进行《新生入学教育》课程学习\n\n038月31日\n\n进行《安全微课》学习\n\n049月6日前\n\n完成物品及教材选购\n\n059月11日前\n\n完成《新生入学教育》及《安全微课》课程学习，获得1个课外学分\n\n069月11日前\n\n本科新生完成网上报到\n\n079月12日\n\n本科新生来校报到\n\n089月13日/14日\n\n英语水平测试及实验（试点）班选拔考试",
+      "title": "本科生新生报到-迎新网站",
+      "source": "whut-2026-timeline.md",
+      "campus_id": "whut",
+      "school_id": "whut",
+      "student_type": "undergraduate",
+      "cohort_year": 2026,
+      "valid_from": "2026-01-01",
+      "valid_to": "2026-12-31",
+      "version": "whut-2026-snapshot-20261011",
+      "source_url": "https://welcome.whut.edu.cn/index/bksxsbd.htm",
+      "snapshot_sha256": "d650a11efe83cf40e5d3a5c77dc013544ec6aa8f9a656325387e5c3d3527e7d2",
+      "fetched_at": "2026-10-11",
+      "source_notes": [
+        "仅适用于2026级本科生；来源快照不代表政策持续有效，个人通知优先。"
+      ]
+    }
+  ],
+  "services": [
+    {
+      "id": "materials",
+      "title": "准备报到备查材料",
+      "campus_id": "whut",
+      "location": "unconfirmed",
+      "location_name": "以个人迎新系统、录取通知书或学院通知为准",
+      "minutes": null,
+      "windows": null,
+      "dependencies": [],
+      "materials": [
+        "录取通知书",
+        "高考准考证",
+        "身份证"
+      ],
+      "due_date": null,
+      "evidence_id": "E-whut-2026-registration",
+      "guidance": "",
+      "evidence_ids": [
+        "E-whut-2026-registration"
+      ],
+      "dependency_kind": "assistant_suggested_order",
+      "appointment_available": false
+    },
+    {
+      "id": "volunteer",
+      "title": "联系学院学生志愿者，确认个人报到地点",
+      "campus_id": "whut",
+      "location": "unconfirmed",
+      "location_name": "以个人迎新系统、录取通知书或学院通知为准",
+      "minutes": null,
+      "windows": null,
+      "dependencies": [],
+      "materials": [],
+      "due_date": null,
+      "evidence_id": "E-whut-2026-registration",
+      "guidance": "在学校迎新系统查看志愿者信息；本助手未连接校内账号。",
+      "evidence_ids": [
+        "E-whut-2026-registration"
+      ],
+      "dependency_kind": "assistant_suggested_order",
+      "appointment_available": false
+    },
+    {
+      "id": "online_registration",
+      "title": "完成学校网上自助报到",
+      "campus_id": "whut",
+      "location": "unconfirmed",
+      "location_name": "以个人迎新系统、录取通知书或学院通知为准",
+      "minutes": null,
+      "windows": null,
+      "dependencies": [],
+      "materials": [],
+      "due_date": "2026-09-11",
+      "evidence_id": "E-whut-2026-timeline",
+      "guidance": "需在学校平台办理，本助手只能记录待办。",
+      "evidence_ids": [
+        "E-whut-2026-timeline"
+      ],
+      "dependency_kind": "assistant_suggested_order",
+      "appointment_available": false
+    },
+    {
+      "id": "education",
+      "title": "完成新生入学教育及安全微课",
+      "campus_id": "whut",
+      "location": "unconfirmed",
+      "location_name": "以个人迎新系统、录取通知书或学院通知为准",
+      "minutes": null,
+      "windows": null,
+      "dependencies": [],
+      "materials": [],
+      "due_date": "2026-09-11",
+      "evidence_id": "E-whut-2026-timeline",
+      "guidance": "",
+      "evidence_ids": [
+        "E-whut-2026-timeline"
+      ],
+      "dependency_kind": "assistant_suggested_order",
+      "appointment_available": false
+    },
+    {
+      "id": "payment",
+      "title": "核对个人缴费通知和资助路径",
+      "campus_id": "whut",
+      "location": "unconfirmed",
+      "location_name": "以个人迎新系统、录取通知书或学院通知为准",
+      "minutes": null,
+      "windows": null,
+      "dependencies": [],
+      "materials": [],
+      "due_date": null,
+      "evidence_id": "E-whut-2026-fees",
+      "guidance": "不能计算个人学费总额；缴费不是所有新生报到的统一前置条件。",
+      "evidence_ids": [
+        "E-whut-2026-fees",
+        "E-whut-2026-green"
+      ],
+      "dependency_kind": "assistant_suggested_order",
+      "appointment_available": false
+    },
+    {
+      "id": "green_channel",
+      "title": "准备绿色通道材料并向学校核实",
+      "campus_id": "whut",
+      "location": "unconfirmed",
+      "location_name": "以个人迎新系统、录取通知书或学院通知为准",
+      "minutes": null,
+      "windows": null,
+      "dependencies": [],
+      "materials": [],
+      "due_date": null,
+      "evidence_id": "E-whut-2026-green",
+      "guidance": "申请资格及审批由学校决定；贷款合同和回执或校园贷预办理材料按个人路径准备。",
+      "evidence_ids": [
+        "E-whut-2026-green"
+      ],
+      "dependency_kind": "assistant_suggested_order",
+      "appointment_available": false
+    },
+    {
+      "id": "registration",
+      "title": "按录取通知书到校报到",
+      "campus_id": "whut",
+      "location": "unconfirmed",
+      "location_name": "以个人迎新系统、录取通知书或学院通知为准",
+      "minutes": null,
+      "windows": null,
+      "dependencies": [
+        "materials",
+        "volunteer"
+      ],
+      "materials": [
+        "录取通知书",
+        "高考准考证",
+        "身份证"
+      ],
+      "due_date": null,
+      "evidence_id": "E-whut-2026-registration",
+      "guidance": "官网总时间线列9月12日；个人录取通知书日期优先，迟到须联系招生办请假。",
+      "evidence_ids": [
+        "E-whut-2026-registration",
+        "E-whut-2026-timeline"
+      ],
+      "dependency_kind": "assistant_suggested_order",
+      "appointment_available": false
+    },
+    {
+      "id": "dorm",
+      "title": "联系志愿者协助宿舍入住",
+      "campus_id": "whut",
+      "location": "unconfirmed",
+      "location_name": "以个人迎新系统、录取通知书或学院通知为准",
+      "minutes": null,
+      "windows": null,
+      "dependencies": [
+        "volunteer"
+      ],
+      "materials": [],
+      "due_date": null,
+      "evidence_id": "E-whut-2026-registration",
+      "guidance": "宿舍分配、钥匙领取及办理时间未知，不生成校方预约。",
+      "evidence_ids": [
+        "E-whut-2026-registration"
+      ],
+      "dependency_kind": "assistant_suggested_order",
+      "appointment_available": false
+    },
+    {
+      "id": "card",
+      "title": "联系志愿者协助领取校园卡",
+      "campus_id": "whut",
+      "location": "unconfirmed",
+      "location_name": "以个人迎新系统、录取通知书或学院通知为准",
+      "minutes": null,
+      "windows": null,
+      "dependencies": [
+        "volunteer"
+      ],
+      "materials": [],
+      "due_date": null,
+      "evidence_id": "E-whut-2026-registration",
+      "guidance": "",
+      "evidence_ids": [
+        "E-whut-2026-registration"
+      ],
+      "dependency_kind": "assistant_suggested_order",
+      "appointment_available": false
+    },
+    {
+      "id": "archives",
+      "title": "自带档案者报到后交给所在学院",
+      "campus_id": "whut",
+      "location": "unconfirmed",
+      "location_name": "以个人迎新系统、录取通知书或学院通知为准",
+      "minutes": null,
+      "windows": null,
+      "dependencies": [
+        "registration"
+      ],
+      "materials": [],
+      "due_date": null,
+      "evidence_id": "E-whut-2026-registration",
+      "guidance": "",
+      "evidence_ids": [
+        "E-whut-2026-registration"
+      ],
+      "dependency_kind": "assistant_suggested_order",
+      "appointment_available": false
+    },
+    {
+      "id": "league",
+      "title": "团员按学院要求办理团组织关系转接",
+      "campus_id": "whut",
+      "location": "unconfirmed",
+      "location_name": "以个人迎新系统、录取通知书或学院通知为准",
+      "minutes": null,
+      "windows": null,
+      "dependencies": [
+        "registration"
+      ],
+      "materials": [
+        "团员证",
+        "团员档案（含入团志愿书）",
+        "转出组织开具时携带介绍信"
+      ],
+      "due_date": "2026-09-30",
+      "evidence_id": "E-whut-2026-registration",
+      "guidance": "",
+      "evidence_ids": [
+        "E-whut-2026-registration"
+      ],
+      "dependency_kind": "assistant_suggested_order",
+      "appointment_available": false
+    }
+  ],
+  "travel": {},
+  "exclusions": [
+    "研究生政策",
+    "图片中的专业学费表",
+    "图片中的交通路线",
+    "校内账号和个人宿舍分配",
+    "未公开的窗口时间、办理时长与坐标"
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "ok": false,
+  "model": "qwen3.5-flash",
+  "error_type": "AuthenticationError"
+}

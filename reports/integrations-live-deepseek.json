@@ -1,0 +1,72 @@
+{
+  "observed_at": "2026-09-21T08:34:07.860049+00:00",
+  "scope": "local real HTTP/MCP and Gradio callbacks; not a live-provider success evaluation",
+  "health": {
+    "status": "ok",
+    "dependencies": {
+      "rag": true,
+      "campus": true,
+      "planner": true
+    },
+    "model_mode": "live",
+    "model": "deepseek-chat",
+    "synthetic_data": true,
+    "demo_date": "2026-09-05"
+  },
+  "integrations": {
+    "ok": true,
+    "data": {
+      "maps_weather": {
+        "provider": "amap",
+        "status": "not_configured",
+        "message": "需要配置高德Web服务API密钥",
+        "coordinate_system": "GCJ-02"
+      },
+      "calendar": {
+        "status": "not_connected",
+        "provider": null,
+        "binding_id": null,
+        "message": "日历适配接口已建立，尚未绑定具体平台或账户。"
+      },
+      "school_notices": {
+        "status": "not_connected"
+      },
+      "school_timetable": {
+        "status": "not_connected"
+      }
+    },
+    "error": null
+  },
+  "ui_http_status": 200,
+  "turn": {
+    "id": "14da79bf-a3d1-4be1-a71b-bb6e7048e790",
+    "session_id": "09fadf82-0f1b-465d-8acd-69f91a0052ee",
+    "message": "查看外部工具连接状态",
+    "status": "completed",
+    "reply": "以下是当前外部工具的连接状态：\n\n| 工具 | 状态 | 说明 |\n|------|------|------|\n| 地图/天气（高德 amap） | **未配置** | 需要配置高德 Web 服务 API 密钥；坐标系为 GCJ-02 |\n| 外部日历 | **未连接** | 日历适配接口已建立，但尚未绑定具体平台或账户 |\n| 学校通知 | **未连接** | — |\n| 学校课表 | **未连接** | — |\n\n需要注意的几点：\n\n- **地图/天气未配置**：目前无法查询真实地点、路线和天气。\n- **日历未连接**：这不代表你的时间是空闲的，只是无法读取外部日历的忙碌时段。\n- **学校通知与课表未连接**：这两个是预留接口，目前无法返回任何通知或课表数据。\n\n如果你需要，我可以帮你查询校内政策、服务窗口、待办事项，或规划到校日程（在已知条件范围内）。",
+    "citations": [],
+    "evidence": [],
+    "trace": [
+      {
+        "protocol": "MCP",
+        "tool": "get_integration_status",
+        "arguments": {},
+        "status": "ok",
+        "latency_ms": 195.88
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 5334,
+      "completion_tokens": 241,
+      "total_tokens": 5575
+    },
+    "pending_actions": [],
+    "plan_id": null,
+    "model_mode": "live",
+    "created_at": 1789979648.6813955,
+    "latency_ms": 3848.94
+  },
+  "ui_connection_callback": "**地图与天气：** 需要配置高德Web服务API密钥\n\n**个人日历：** 日历适配接口已建立，尚未绑定具体平台或账户。\n\n**学校通知与个人课表：** 仅预留接口，尚未连接学校系统。",
+  "ui_invalid_route_callback": "路线需要有效的GCJ-02起终点坐标；出行方式为walking或driving。",
+  "ui_visual_check": "not_performed: browser automation unavailable; callbacks checked via Gradio client"
+}
