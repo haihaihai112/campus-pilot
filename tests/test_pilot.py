@@ -347,3 +347,65 @@ async def test_ui_callbacks_reject_foreign_session(pilot_stack):
         assert 'event: complete' in own_stream.text
         payload = json.loads(next(line[6:] for line in own_stream.text.splitlines() if line.startswith('data: ')))
         assert payload[0][0]['content'] == '报到材料'
+
+
+@pytest.mark.integration
+async def test_ui_and_rest_same_checklist_and_readable_turn_id(pilot_stack):
+    Accounts(pilot_stack.config).create('ui-case', PASSWORD)
+    async with httpx.AsyncClient(base_url=pilot_stack.base, timeout=45, trust_env=False) as client, \
+               httpx.AsyncClient(base_url=pilot_stack.base, timeout=45, trust_env=False) as other:
+        await sign_in(client, 'ui-case')
+        await sign_in(other, 'bob')
+        message = '周六下午两点到明德校区，帮我生成报到入住清单'
+        created = (await client.post('/v1/chat', json={'message': message})).json()
+        rest = await poll_turn(client, created['turn_id'])
+        config = (await client.get('/ui/config')).json()
+        submit = next(d['api_name'] for d in config['dependencies'] if d.get('api_name', '').startswith('submit'))
+        response = await client.post('/ui/gradio_api/call/' + submit, json={'data': [message, '', []]})
+        stream = await client.get('/ui/gradio_api/call/' + submit + '/' + response.json()['event_id'])
+        assert 'event: complete' in stream.text, stream.text
+        payload = json.loads([line[6:] for line in stream.text.splitlines() if line.startswith('data: ')][-1])
+        assert isinstance(payload[7], str) and payload[7]
+        assert payload[9]['visible'] is True
+        ui_turn = (await client.get('/v1/turns/' + payload[7])).json()
+        assert rest['workflow_outcome'] == ui_turn['workflow_outcome'] == 'preview_ready'
+        assert rest['pending_actions'] and ui_turn['pending_actions']
+        rest_plan = (await client.get('/v1/plans/' + rest['plan_id'])).json()
+        ui_plan = (await client.get('/v1/plans/' + ui_turn['plan_id'])).json()
+        assert rest_plan['items'] == ui_plan['items']
+        denied = await other.post('/ui/gradio_api/call/save', json={'data': [payload[7]]})
+        denied_stream = await other.get('/ui/gradio_api/call/save/' + denied.json()['event_id'])
+        assert 'event: error' in denied_stream.text
+        saved = await client.post('/ui/gradio_api/call/save', json={'data': [payload[7]]})
+        saved_stream = await client.get('/ui/gradio_api/call/save/' + saved.json()['event_id'])
+        assert 'event: complete' in saved_stream.text
+        saved_payload = json.loads(next(line[6:] for line in saved_stream.text.splitlines() if line.startswith('data: ')))
+        assert '已保存' in saved_payload[0]
+        assert saved_payload[1]['visible'] is False
+        rejected = await client.post('/ui/gradio_api/call/reject_current', json={'data': [rest['id']]})
+        rejected_stream = await client.get('/ui/gradio_api/call/reject_current/' + rejected.json()['event_id'])
+        assert 'event: complete' in rejected_stream.text
+        rejected_payload = json.loads(next(line[6:] for line in rejected_stream.text.splitlines() if line.startswith('data: ')))
+        assert '未执行写入' in rejected_payload[0]
+        assert rejected_payload[1]['visible'] is False
+
+
+@pytest.mark.integration
+async def test_minimal_ui_new_conversation_keeps_history(pilot_stack):
+    async with httpx.AsyncClient(base_url=pilot_stack.base, timeout=30, trust_env=False) as client:
+        await sign_in(client, 'alice')
+        created = (await client.post('/v1/chat', json={'message': '报到材料'})).json()
+        old = await poll_turn(client, created['turn_id'])
+        before = (await client.get('/v1/todos')).json()
+        config = (await client.get('/ui/config')).json()
+        confirmation = next(c for c in config['components'] if c['props'].get('elem_id') == 'cp-confirm')
+        assert confirmation['props']['visible'] is False
+        response = await client.post('/ui/gradio_api/call/new_conversation', json={'data': []})
+        stream = await client.get('/ui/gradio_api/call/new_conversation/' + response.json()['event_id'])
+        assert 'event: complete' in stream.text
+        payload = json.loads(next(line[6:] for line in stream.text.splitlines() if line.startswith('data: ')))
+        assert payload[1] == '' and payload[2] == [] and payload[7] == ''
+        assert payload[9]['visible'] is False
+        assert (await client.get('/v1/sessions/' + old['session_id'])).status_code == 200
+        assert (await client.get('/v1/turns/' + old['id'])).json()['reply'] == old['reply']
+        assert (await client.get('/v1/todos')).json() == before

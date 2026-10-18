@@ -2,7 +2,7 @@ from ..auth import role
 from ..models import failure, success
 from .calendar import CalendarService
 from .maps import AmapProvider, CampusLocations
-from .school import school_unavailable
+from .school import SchoolService, school_unavailable
 
 
 READ_INTEGRATIONS = {'get_integration_status', 'search_places', 'get_route',
@@ -14,13 +14,14 @@ def register_integrations(mcp, config, campus):
     maps = AmapProvider(config)
     locations = CampusLocations(config)
     calendar = CalendarService(config, campus)
+    school = SchoolService()
 
     @mcp.tool()
     def get_integration_status() -> dict:
         """Read configured integration status. Configured does not mean verified connectivity."""
         return success({'maps_weather': maps.status(), 'calendar': calendar.status(),
                         'school_notices': {'status': 'not_connected'},
-                        'school_timetable': {'status': 'not_connected'}})
+                        'school_timetable': school.status(), 'school_housing': school.status()})
 
     @mcp.tool()
     async def search_places(keywords: str, city: str, limit: int = 5) -> dict:
@@ -62,6 +63,11 @@ def register_integrations(mcp, config, campus):
         return school_unavailable('notices')
 
     @mcp.tool()
-    def get_timetable(start_date: str, end_date: str) -> dict:
+    async def get_timetable(start_date: str, end_date: str, user_id: str = 'demo-user') -> dict:
         """Reserved personal timetable adapter. Requires an authorized school integration; currently unconnected."""
-        return school_unavailable('timetable')
+        return await school.timetable(user_id, start_date, end_date)
+
+    @mcp.tool()
+    async def get_dorm_assignment(user_id: str = 'demo-user') -> dict:
+        """Read this account's authorized housing assignment. Unconnected is not an empty assignment."""
+        return await school.housing(user_id)

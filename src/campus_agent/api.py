@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import time
 import uuid
+from datetime import date
 from contextlib import asynccontextmanager
 from urllib.parse import parse_qs
 
@@ -17,6 +18,8 @@ from .config import Settings
 from .models import ChatRequest
 from .protocols import MCPGateway
 from .integrations.maps import PlaceQuery, RouteQuery, WeatherQuery
+from .integrations.school import HousingResponse, TimetableResponse
+from .ui_theme import LOGIN_HTML
 
 
 class TodoProposal(BaseModel):
@@ -41,22 +44,6 @@ class FeedbackRequest(BaseModel):
     rating: str = Field(pattern='^(helpful|unhelpful)$')
     comment: str = Field(default='', max_length=2000)
 
-
-LOGIN_HTML = '''<!doctype html><html lang="zh-CN"><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CampusPilot · 登录</title><style>
-body{font-family:system-ui;background:#f3f7f6;margin:0;padding:48px 20px;color:#163b36}
-main{max-width:400px;margin:auto;background:white;padding:32px;border-radius:20px}
-input,button{display:block;box-sizing:border-box;width:100%;padding:12px;margin:12px 0;font:inherit}
-button{background:#16776c;color:white;border:0;border-radius:8px;cursor:pointer}
-small{color:#526460;line-height:1.8}a{color:#16776c}</style>
-<main><h1>CampusPilot</h1><p>新生入学事务助手 · 邀请体验</p>
-<form method="post" action="/login">
-<label>账号<input name="username" autocomplete="username" required maxlength="40"></label>
-<label>密码<input name="password" type="password" autocomplete="current-password" required maxlength="256"></label>
-<button type="submit">登录工作台</button></form>
-<small>使用公开资料辅助整理办理事项，个人报到安排以学校通知为准。账号由组织者分配。
-体验时请勿提交身份证、录取通知书或其他敏感材料。</small></main></html>'''
 
 
 def create_app(config: Settings, with_ui=True):
@@ -90,7 +77,10 @@ def create_app(config: Settings, with_ui=True):
 
     @app.get('/login', response_class=HTMLResponse)
     async def login_page():
-        return HTMLResponse(LOGIN_HTML, headers={'Cache-Control': 'no-store'})
+        html = LOGIN_HTML
+        if config.public_origin:
+            html = html.replace('action="/login"', f'action="{config.public_origin}/login"')
+        return HTMLResponse(html, headers={'Cache-Control': 'no-store'})
 
     @app.post('/login')
     async def login_form(request: Request):
@@ -212,6 +202,18 @@ def create_app(config: Settings, with_ui=True):
     @app.get('/v1/integrations')
     async def integrations():
         return await MCPGateway(config).call('get_integration_status', {})
+
+    @app.get('/v1/school/timetable', response_model=TimetableResponse)
+    async def school_timetable(request: Request, start_date: date, end_date: date):
+        """Current account only. Inclusive date range, up to 31 days; no school connection yet."""
+        return await MCPGateway(config).call('get_timetable', {
+            'user_id': request_user(request, config),
+            'start_date': start_date.isoformat(), 'end_date': end_date.isoformat()})
+
+    @app.get('/v1/school/housing', response_model=HousingResponse)
+    async def school_housing(request: Request):
+        """Current account's read-only housing assignment. Never accepts a student number."""
+        return await MCPGateway(config).call('get_dorm_assignment', {'user_id': request_user(request, config)})
 
     @app.post('/v1/maps/places')
     async def places(request: PlaceQuery):

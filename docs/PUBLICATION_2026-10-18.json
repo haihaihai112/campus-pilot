@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-18",
+  "source_head": "bf564db0f9ed01de030589003abb92097a7bced5",
+  "remote_base": "e5670d6fdd421c7a44281b432fe5952beba58e88",
+  "execution": "Publication clone; reused source venv dependencies; PYTHONPATH points to publication src; fixture mode; absent dedicated env path; API keys cleared; no paid calls.",
+  "pytest": {
+    "tests": "162",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "169.368"
+  },
+  "ruff": "passed: src tests scripts",
+  "git_diff_check": "passed",
+  "four_process_smoke": {
+    "checks_passed": true,
+    "paid_model_calls": 0,
+    "profile": "whut-2026",
+    "reference_date": "2026-10-18",
+    "checks": [
+      "source-backed QA",
+      "A2A clarification",
+      "plan preview",
+      "no writes before confirmation",
+      "foreign-account confirmation 404",
+      "idempotent repeat confirmation",
+      "personal task isolation"
+    ]
+  },
+  "not_rerun": [
+    "Paid/live model evaluation",
+    "Internet tunnel/HTTPS deployment",
+    "Actual university APIs/SSO",
+    "Real student trial or 50-70 user capacity",
+    "Docker execution",
+    "Milvus/BGE and live maps/weather"
+  ],
+  "historical_only": "Source documentation reports a live DeepSeek developer regression (6 calls, 29038 tokens), local HTTPS browser checks, and test-account preparation. Those were not rerun or counted as student adoption."
+}

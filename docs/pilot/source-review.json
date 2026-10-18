@@ -1,0 +1,131 @@
+{
+  "local_snapshot_date": "2026-10-11",
+  "live_checks_performed": true,
+  "sources": [
+    {
+      "evidence_id": "E-whut-2026-registration",
+      "url": "https://welcome.whut.edu.cn/info/1061/1161.htm",
+      "snapshot_sha256": "0aa167ed2965ec9d4821c9270cac71b9fc7b30538fc2935b3fbfa2da59e8c5a1",
+      "local_text_available": true,
+      "scope": "2026级本科",
+      "status": "live_body_unchanged_policy_currency_unconfirmed",
+      "reviewed_at": "2026-10-18",
+      "still_applicable": null,
+      "changes": "重新读取成功，按原入库规则截取的正文与2026-10-11入库文本完全一致；政策持续有效性仍未确认。",
+      "reviewer": "implementation_assistant_source_comparison",
+      "limitations": [
+        "仅适用于2026级本科生；来源快照不代表政策持续有效，个人通知优先。",
+        "网页description仍含2025字样，正文明确2026；本资料以正文为准并保留差异。"
+      ],
+      "live_review": {
+        "evidence_id": "E-whut-2026-registration",
+        "url": "https://welcome.whut.edu.cn/info/1061/1161.htm",
+        "reviewed_on": "2026-10-18",
+        "timezone": "Asia/Shanghai",
+        "status_code": 200,
+        "scrape_id": "01a14d32-7836-70dc-9820-67b16cac2ec5",
+        "raw_local_path": "work/source-review-20261018/.firecrawl/registration.json",
+        "raw_sha256": "9125d4504030be9e866e2fff7d2be8a5ff5bc066c5f29be05b272234105c58d2",
+        "extracted_body_sha256": "376be58e3d1b78b4b9f06bdf3b06346b9843e5afa38e913d10ce211f02a54360",
+        "matches_ingested_20261011_text": true,
+        "policy_currency_confirmed": false,
+        "warning": null,
+        "reported_crawl_credits": 1
+      }
+    },
+    {
+      "evidence_id": "E-whut-2026-fees",
+      "url": "https://welcome.whut.edu.cn/info/1061/1121.htm",
+      "snapshot_sha256": "587ddb25366d86b71b3c64e799fc70025425843e1c5e323879359c5087f92191",
+      "local_text_available": true,
+      "scope": "2026级本科",
+      "status": "live_body_unchanged_policy_currency_unconfirmed",
+      "reviewed_at": "2026-10-18",
+      "still_applicable": null,
+      "changes": "重新读取成功，按原入库规则截取的正文与2026-10-11入库文本完全一致；政策持续有效性仍未确认。",
+      "reviewer": "implementation_assistant_source_comparison",
+      "limitations": [
+        "仅适用于2026级本科生；来源快照不代表政策持续有效，个人通知优先。",
+        "年份依据本科入口及页面2026标识；不得推及2027年或研究生。",
+        "专业学费表为图片未转录；医保按最新文件，个人总费用未知。"
+      ],
+      "live_review": {
+        "evidence_id": "E-whut-2026-fees",
+        "url": "https://welcome.whut.edu.cn/info/1061/1121.htm",
+        "reviewed_on": "2026-10-18",
+        "timezone": "Asia/Shanghai",
+        "status_code": 200,
+        "scrape_id": "01a14d32-d064-705e-a159-d0ebb0791dd1",
+        "raw_local_path": "work/source-review-20261018/.firecrawl/fees.json",
+        "raw_sha256": "ae7e585ecbb83f1b70d7bdc2e9ec8fb9f8a46fcccb1898c04a75de493ed23166",
+        "extracted_body_sha256": "4de0e385204720dbfb3a84d8a31c40a49a13fae429486c3e84cddbd917dd9647",
+        "matches_ingested_20261011_text": true,
+        "policy_currency_confirmed": false,
+        "warning": null,
+        "reported_crawl_credits": 1
+      }
+    },
+    {
+      "evidence_id": "E-whut-2026-green",
+      "url": "https://welcome.whut.edu.cn/info/1061/1151.htm",
+      "snapshot_sha256": "e28d07f95cf45ffa9e9c1e1348e164f8f94c31eaeeaaee208cbe054ac352c1d3",
+      "local_text_available": true,
+      "scope": "2026级本科",
+      "status": "live_body_unchanged_policy_currency_unconfirmed",
+      "reviewed_at": "2026-10-18",
+      "still_applicable": null,
+      "changes": "重新读取成功，按原入库规则截取的正文与2026-10-11入库文本完全一致；政策持续有效性仍未确认。",
+      "reviewer": "implementation_assistant_source_comparison",
+      "limitations": [
+        "仅适用于2026级本科生；来源快照不代表政策持续有效，个人通知优先。",
+        "年份依据本科入口及页面2026标识；不得推及2027年或研究生。"
+      ],
+      "live_review": {
+        "evidence_id": "E-whut-2026-green",
+        "url": "https://welcome.whut.edu.cn/info/1061/1151.htm",
+        "reviewed_on": "2026-10-18",
+        "timezone": "Asia/Shanghai",
+        "status_code": 200,
+        "scrape_id": "01a14d32-d067-7767-b79c-d6737444de0a",
+        "raw_local_path": "work/source-review-20261018/.firecrawl/green.json",
+        "raw_sha256": "baf31caf6414dde21f146631d6ec4cbc9824a1f7f6a8de51eed306ab440f44e2",
+        "extracted_body_sha256": "8163cc10b5783071d214603374862e6875d4c59fdaebd15a8c2edaa13be5a6a9",
+        "matches_ingested_20261011_text": true,
+        "policy_currency_confirmed": false,
+        "warning": null,
+        "reported_crawl_credits": 1
+      }
+    },
+    {
+      "evidence_id": "E-whut-2026-timeline",
+      "url": "https://welcome.whut.edu.cn/index/bksxsbd.htm",
+      "snapshot_sha256": "d650a11efe83cf40e5d3a5c77dc013544ec6aa8f9a656325387e5c3d3527e7d2",
+      "local_text_available": true,
+      "scope": "2026级本科",
+      "status": "live_body_unchanged_policy_currency_unconfirmed",
+      "reviewed_at": "2026-10-18",
+      "still_applicable": null,
+      "changes": "重新读取成功，按原入库规则截取的正文与2026-10-11入库文本完全一致；政策持续有效性仍未确认。",
+      "reviewer": "implementation_assistant_source_comparison",
+      "limitations": [
+        "仅适用于2026级本科生；来源快照不代表政策持续有效，个人通知优先。"
+      ],
+      "live_review": {
+        "evidence_id": "E-whut-2026-timeline",
+        "url": "https://welcome.whut.edu.cn/index/bksxsbd.htm",
+        "reviewed_on": "2026-10-18",
+        "timezone": "Asia/Shanghai",
+        "status_code": 200,
+        "scrape_id": "01a14d32-d099-754c-96ff-3742bd1b39c9",
+        "raw_local_path": "work/source-review-20261018/.firecrawl/timeline.json",
+        "raw_sha256": "cbe0c9a707b67030bedc74c9bd0b0113a928633fbe255e7a530d84c45a5f761f",
+        "extracted_body_sha256": "cfe6c2db3384219e6f35aa11f6fed081e2e2c0062c8e49ee40656bda92329222",
+        "matches_ingested_20261011_text": true,
+        "policy_currency_confirmed": false,
+        "warning": "This scrape job was throttled at your current concurrency limit. If you'd like to scrape faster, you can upgrade your plan.",
+        "reported_crawl_credits": 1
+      }
+    }
+  ],
+  "live_review_scope": "HTTP状态、URL、标题和入库正文比较；不含图片内容、补办许可或政策有效性保证"
+}

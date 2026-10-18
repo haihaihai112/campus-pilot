@@ -1,0 +1,14 @@
+{
+  "currency": null,
+  "verified_at": null,
+  "source_url": null,
+  "rates": [
+    {
+      "endpoint_host": null,
+      "model": null,
+      "input_per_million": null,
+      "output_per_million": null
+    }
+  ],
+  "note": "所有价格待从供应商有效页面核实。服务器报价另记，同币种同试用窗口。"
+}

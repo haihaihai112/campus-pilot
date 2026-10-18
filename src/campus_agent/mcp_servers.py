@@ -56,6 +56,14 @@ def create_mcp(kind: str, config: Settings):
             return campus.apply(snapshot, operation_id)
 
         @mcp.tool()
+        def create_personal_todo(title: str, operation_id: str, user_id: str = 'demo-user',
+                                 due_date: str | None = None, start: str | None = None, end: str | None = None) -> dict:
+            """WRITE: save an approved personal todo; no school evidence or appointment implied."""
+            if role.get() != 'write':
+                return failure('forbidden', '只读凭据不能创建待办')
+            return campus.create_todo(title, operation_id, user_id, due_date, start, end)
+
+        @mcp.tool()
         def update_todo_status(todo_id: str, status: str, expected_version: int,
                                operation_id: str, user_id: str = 'demo-user') -> dict:
             """WRITE: update a todo with optimistic locking and idempotency."""

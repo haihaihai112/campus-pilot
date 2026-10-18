@@ -4,7 +4,7 @@ English · [简体中文](README.md)
 
 CampusPilot is an agent workbench for student onboarding questions, checklists, and personal reminders. The main assistant queries knowledge and campus tools through MCP and delegates planning to a separate agent through A2A. Personal tasks and calendar entries are saved after user confirmation.
 
-The current version is **v0.3.1**. Its default knowledge base uses public Wuhan University of Technology (WHUT) materials for the 2026 undergraduate cohort, captured on 2026-10-11. It contains 4 reviewed official sources and 11 checklist templates. This personal development project does not connect to the university's personal business systems.
+The current version is **v0.3.1 with the 2026-10-18 pilot-readiness update**. Its default knowledge base uses public Wuhan University of Technology (WHUT) materials for the 2026 undergraduate cohort, captured on 2026-10-11. It contains 4 reviewed official sources and 11 checklist templates. This personal development project does not connect to the university's personal business systems.
 
 ## Features
 
@@ -16,6 +16,16 @@ The current version is **v0.3.1**. Its default knowledge base uses public Wuhan 
 - Record cancellation and interrupted work, and keep question answering available when the planning service is down.
 
 The assistant does not invent university appointment slots. Expired onboarding dates prompt the user to confirm arrangements with the university. Personal reminders are neither university appointments nor a guaranteed notification service.
+
+## 2026-10-18 update
+
+- Personal task queries read the authenticated user's MCP data directly; single-task drafts require preview and confirmation, with rejection and stale-draft handling.
+- A main chat and explanatory sidebar keep history, tasks, sources, and feedback in expandable panels. Enter sends; Shift+Enter adds a line.
+- Operations separate account categories, fixture/live mode, turn status, saved writes, manual task review, and per-call token usage. Tools cover cost estimates, offline queue simulation, stopped-service SQLite backup, and restore into a new directory.
+- Read-only timetable and housing contracts validate source timestamps, requested ranges, and record ownership. They default to not connected; no university authorization or live personal-data integration is claimed.
+- Local HTTPS tunnel start/stop scripts and an explicit allowed public origin support invite-only sharing. Access depends on the operator's computer and a temporary tunnel; no permanent public demo URL is advertised.
+
+The rollout plan starts with five interviews, then targets 5 → 15–20 → 50–70 cumulative participants. These are goals, not adoption or tested throughput. See the [pilot kit](docs/pilot/README.md), [school contracts](docs/SCHOOL_INTEGRATION.md), and [project report](docs/RESUME_PROJECT.md).
 
 ## Stack and architecture
 
@@ -79,7 +89,7 @@ Create a configuration and account to use login isolation. These are PowerShell 
 uv run --no-sync campus init-pilot
 $env:CAMPUS_ENV_FILE = Join-Path (Get-Location) '.env.pilot'
 uv run --no-sync campus accounts add student01
-./scripts/start-pilot.ps1 -Fixture
+pwsh -NoProfile -File ./scripts/start-pilot.ps1 -Fixture
 ```
 
 Open the [login page](http://127.0.0.1:8010/login). Accounts are created individually through the CLI; there is no self-registration. Passwords are entered interactively and require at least 12 characters. `init-pilot` generates three private service credentials and refuses to overwrite an existing `.env.pilot`.
@@ -95,9 +105,9 @@ LLM_MODEL=your-tool-calling-model
 LLM_BASE_URL=https://your-provider.example/v1
 ```
 
-Use a model supported by the configured provider and endpoint. The model must support native `tool_calls`. Run `./scripts/start-pilot.ps1`, or set `CAMPUS_ENV_FILE` and run `uv run --no-sync campus all`. Live mode consumes the configured provider's quota. Keep configuration files and credentials out of Git.
+Use a model supported by the configured provider and endpoint. The model must support native `tool_calls`. Run `pwsh -NoProfile -File ./scripts/start-pilot.ps1`, or set `CAMPUS_ENV_FILE` and run `uv run --no-sync campus all`. Live mode consumes the configured provider's quota. Keep configuration files and credentials out of Git.
 
-The generated local HTTP configuration uses `COOKIE_SECURE=false`. Remote invite-only trials require HTTPS and `COOKIE_SECURE=true`; see [pilot deployment](docs/PILOT.md) for deployment and backup requirements. Account management and statistics must use the same configuration:
+The generated local HTTP configuration uses `COOKIE_SECURE=false`. Remote invite-only trials require HTTPS and `COOKIE_SECURE=true`; see [pilot deployment](docs/PILOT.md) for deployment and backup requirements. For temporary local sharing, run `pwsh -NoProfile -File ./scripts/start-https.ps1` after configuring the same `.env.pilot`, invite accounts, and model. Stop with `pwsh -NoProfile -File ./scripts/stop-https.ps1`; see [HTTPS conditions](docs/pilot/HTTPS_LOCAL.md). Account management and statistics must use the same configuration:
 
 ```powershell
 uv run --no-sync campus accounts list
@@ -106,6 +116,8 @@ uv run --no-sync campus stats
 ```
 
 ## Checks and validation records
+
+The 2026-10-18 publication copy reruns the existing offline regressions using fixture mode, isolated configuration, and new runtime directories; actual results are recorded in [publication checks](docs/PUBLICATION.md). Historical migration checks, a live-model developer regression, and temporary HTTPS checks remain separate evidence, not model accuracy or student adoption.
 
 ```powershell
 uv run --no-sync pytest -q --junitxml=reports/tests-local.xml
@@ -124,10 +136,10 @@ Rebuild the data with `uv run --no-sync python scripts/build_whut_data.py`. The 
 ## Scope and limitations
 
 - Only 4 sources for the 2026 undergraduate cohort were reviewed. Tuition and transport images were not transcribed. Graduate policies, other cohorts, personal fees, dorm assignments, and registration office hours remain unverified.
-- Live model quality has not been evaluated for the current WHUT version. Retrieval metrics and live traces from the older synthetic knowledge base do not describe this version.
+- The current WHUT version has a recorded live DeepSeek developer regression, but no independent model-quality evaluation. Retrieval metrics and live traces from the older synthetic knowledge base do not describe this version.
 - Milvus/BGE, live map and weather calls, and Docker container execution remain unverified. A Compose syntax check does not establish that containers ran.
-- No external calendar provider is bound. University notifications and timetables have interface placeholders only; payment, academic administration, and aid approval are not performed.
-- There is no verified public production deployment, real user population, or load test for 50 to 100 users. Queues and concurrency controls are local to one process; do not simply add workers.
+- No external calendar provider is bound. Timetables and housing have read-only contracts but no authorized live adapter; university notifications remain a placeholder. Payment, academic administration, and aid approval are not performed.
+- A temporary local HTTPS invitation entry was verified. There is no fixed cloud deployment, verified student adoption count, or load test for the 50–70 participant target. Queues and concurrency controls are local to one process; do not simply add workers.
 - Account isolation is enforced at the main application boundary. MCP/A2A services are trusted internal services, not independent authorization services for multiple tenants.
 
 ## Documentation

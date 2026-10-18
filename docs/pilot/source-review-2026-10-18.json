@@ -1,0 +1,79 @@
+{
+  "reviewed_on": "2026-10-18",
+  "timezone": "Asia/Shanghai",
+  "live_requests": 4,
+  "request_cache_max_age": 0,
+  "method": "Firecrawl CLI keyless read; markdown/html; original body boundaries and image placeholders",
+  "raw_outputs_gitignored": true,
+  "production_data_changed": false,
+  "paid_model_calls": 0,
+  "reported_crawl_credits": 4,
+  "billing_note": "CLI未登录，使用无需密钥读取；返回每页1个抓取credit，未购买或升级服务，不等于零资源消耗。",
+  "sources": [
+    {
+      "evidence_id": "E-whut-2026-registration",
+      "url": "https://welcome.whut.edu.cn/info/1061/1161.htm",
+      "reviewed_on": "2026-10-18",
+      "timezone": "Asia/Shanghai",
+      "status_code": 200,
+      "scrape_id": "01a14d32-7836-70dc-9820-67b16cac2ec5",
+      "raw_local_path": "work/source-review-20261018/.firecrawl/registration.json",
+      "raw_sha256": "9125d4504030be9e866e2fff7d2be8a5ff5bc066c5f29be05b272234105c58d2",
+      "extracted_body_sha256": "376be58e3d1b78b4b9f06bdf3b06346b9843e5afa38e913d10ce211f02a54360",
+      "matches_ingested_20261011_text": true,
+      "policy_currency_confirmed": false,
+      "warning": null,
+      "reported_crawl_credits": 1
+    },
+    {
+      "evidence_id": "E-whut-2026-fees",
+      "url": "https://welcome.whut.edu.cn/info/1061/1121.htm",
+      "reviewed_on": "2026-10-18",
+      "timezone": "Asia/Shanghai",
+      "status_code": 200,
+      "scrape_id": "01a14d32-d064-705e-a159-d0ebb0791dd1",
+      "raw_local_path": "work/source-review-20261018/.firecrawl/fees.json",
+      "raw_sha256": "ae7e585ecbb83f1b70d7bdc2e9ec8fb9f8a46fcccb1898c04a75de493ed23166",
+      "extracted_body_sha256": "4de0e385204720dbfb3a84d8a31c40a49a13fae429486c3e84cddbd917dd9647",
+      "matches_ingested_20261011_text": true,
+      "policy_currency_confirmed": false,
+      "warning": null,
+      "reported_crawl_credits": 1
+    },
+    {
+      "evidence_id": "E-whut-2026-green",
+      "url": "https://welcome.whut.edu.cn/info/1061/1151.htm",
+      "reviewed_on": "2026-10-18",
+      "timezone": "Asia/Shanghai",
+      "status_code": 200,
+      "scrape_id": "01a14d32-d067-7767-b79c-d6737444de0a",
+      "raw_local_path": "work/source-review-20261018/.firecrawl/green.json",
+      "raw_sha256": "baf31caf6414dde21f146631d6ec4cbc9824a1f7f6a8de51eed306ab440f44e2",
+      "extracted_body_sha256": "8163cc10b5783071d214603374862e6875d4c59fdaebd15a8c2edaa13be5a6a9",
+      "matches_ingested_20261011_text": true,
+      "policy_currency_confirmed": false,
+      "warning": null,
+      "reported_crawl_credits": 1
+    },
+    {
+      "evidence_id": "E-whut-2026-timeline",
+      "url": "https://welcome.whut.edu.cn/index/bksxsbd.htm",
+      "reviewed_on": "2026-10-18",
+      "timezone": "Asia/Shanghai",
+      "status_code": 200,
+      "scrape_id": "01a14d32-d099-754c-96ff-3742bd1b39c9",
+      "raw_local_path": "work/source-review-20261018/.firecrawl/timeline.json",
+      "raw_sha256": "cbe0c9a707b67030bedc74c9bd0b0113a928633fbe255e7a530d84c45a5f761f",
+      "extracted_body_sha256": "cfe6c2db3384219e6f35aa11f6fed081e2e2c0062c8e49ee40656bda92329222",
+      "matches_ingested_20261011_text": true,
+      "policy_currency_confirmed": false,
+      "warning": "This scrape job was throttled at your current concurrency limit. If you'd like to scrape faster, you can upgrade your plan.",
+      "reported_crawl_credits": 1
+    }
+  ],
+  "limitations": [
+    "未核实政策持续有效性或学校是否允许补办",
+    "未转录图片或新增资料",
+    "不构成独立案例标注、真实学生需求或真实模型效果证据"
+  ]
+}

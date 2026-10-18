@@ -30,3 +30,13 @@ work/
 *.sqlite*
 *.log
 Agent.md
+
+# New trial artifacts stay local; historical published summaries remain tracked.
+reports/
+AGENTS.md
+*.pem
+*.key
+*.pfx
+*.p12
+*.zip
+*.db-*

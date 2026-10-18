@@ -14,10 +14,12 @@ from fastapi import HTTPException
 from .access import Accounts, owned
 from .config import Settings
 from .db import Store, dumps
-from .llm import Model, function_tool
-from .models import Plan, PlanRequest, failure, success
+from .llm import Model, function_tool, tool_message
+from .models import PersonalTodo, Plan, PlanRequest, failure, success
+from .personal import action_result, checklist_request, decision, render_todos, todo_deletion, todo_query
 from .protocols import MCPGateway, PlannerClient, task_artifact, task_text
 from .integrations.tools import READ_INTEGRATIONS
+from .telemetry import MODEL_CALLS
 
 
 class TurnState(TypedDict, total=False):
@@ -35,6 +37,9 @@ class TurnState(TypedDict, total=False):
     turn_id: str
     pending_actions: list[str]
     plan_id: str | None
+    workflow_outcome: str
+    tool_errors: list[dict]
+    model_calls: list[dict]
 
 
 READ_TOOLS = {'search_knowledge', 'get_service_info', 'get_travel_times', 'list_todos',
@@ -55,7 +60,8 @@ class Assistant:
         self.graph = self._graph()
         for turn in self.db.all('turns'):
             if turn['status'] in ('queued', 'working'):
-                turn.update(status='interrupted', reply='服务重启，本轮处理已中断。已保存事项不受影响，请重新发起请求。')
+                turn.update(status='interrupted', workflow_outcome='interrupted', error_type='ServiceRestart',
+                            reply='服务重启，本轮处理已中断。已保存事项不受影响，请重新发起请求。')
                 self.db.put('turns', turn['id'], turn)
 
     async def discover_tools(self):
@@ -88,6 +94,10 @@ class Assistant:
             'type': 'object', 'properties': {'todo_id': {'type': 'string'},
                 'status': {'type': 'string', 'enum': ['pending', 'completed']}, 'expected_version': {'type': 'integer'}},
             'required': ['todo_id', 'status', 'expected_version'], 'additionalProperties': False}))
+        values.append(function_tool('request_todo_create',
+            '为用户明确要求的单条个人待办生成确认预览，不委派入学规划。截止日用YYYY-MM-DD；'
+            '无提醒时start/end留空，不要求用户提供提醒。需要提醒则先追问明确含时区的起止时间。不能编造时间。',
+            PersonalTodo.model_json_schema()))
         values.append(function_tool('request_calendar_sync', '提出将当前会话的已保存计划同步到外部日历；只生成待确认操作，不写入。未绑定平台时不可用。', {
             'type': 'object', 'properties': {'reminder_minutes': {'type': 'integer', 'minimum': 0, 'maximum': 10080}},
             'additionalProperties': False}))
@@ -105,11 +115,17 @@ class Assistant:
             self.accounts.consume('chat', user_id, self.config.turns_per_hour, 3600)
         session_id = session_id or str(uuid.uuid4())
         if not self.db.get('sessions', session_id):
-            self.db.put('sessions', session_id, {'id': session_id, 'user_id': user_id, 'messages': [], 'evidence': {}})
+            enrollment = self.db.get('enrollments', user_id, {})
+            self.db.put('sessions', session_id, {'id': session_id, 'user_id': user_id, 'messages': [], 'evidence': {},
+                'cohort': enrollment.get('cohort', 'unclassified'),
+                'usage_purpose': enrollment.get('usage_purpose', 'unclassified')})
+        session = self.db.get('sessions', session_id)
         turn_id = str(uuid.uuid4())
         turn = {'id': turn_id, 'session_id': session_id, 'user_id': user_id, 'message': message, 'status': 'queued', 'reply': '',
                 'citations': [], 'evidence': [], 'trace': [], 'usage': {}, 'pending_actions': [], 'plan_id': None,
-                'model_mode': self.config.mode, 'created_at': time.time()}
+                'model_mode': self.config.mode, 'created_at': time.time(),
+                'cohort': session.get('cohort', 'unclassified'),
+                'usage_purpose': session.get('usage_purpose', 'unclassified')}
         self.db.put('turns', turn_id, turn)
         task = asyncio.create_task(self.run_turn(turn_id))
         self.jobs.add(task)
@@ -122,15 +138,33 @@ class Assistant:
         self.db.put('turns', turn_id, turn)
 
     async def run_turn(self, turn_id):
+        queued_at = time.perf_counter()
+        calls = []
+        token = MODEL_CALLS.set(calls)
+        try:
+            await self._process_turn(turn_id, queued_at)
+        except asyncio.CancelledError:
+            self.patch_turn(turn_id, status='interrupted', workflow_outcome='interrupted',
+                            error_type='CancelledError', reply='处理已中断，已保存事项保持不变。')
+            raise
+        finally:
+            row = self.db.get('turns', turn_id)
+            total = round((time.perf_counter() - queued_at) * 1000, 2)
+            self.patch_turn(turn_id, total_latency_ms=total,
+                queue_wait_ms=row.get('queue_wait_ms', total),
+                finished_at=time.time(), model_calls=calls + row.get('model_calls', []))
+            MODEL_CALLS.reset(token)
+
+    async def _process_turn(self, turn_id, queued_at):
         initial = self.db.get('turns', turn_id)
         sid = initial['session_id']
         async with self.locks.setdefault(sid, asyncio.Lock()), self.active_slots:
             began = time.perf_counter()
-            self.patch_turn(turn_id, status='working')
+            self.patch_turn(turn_id, status='working', started_at=time.time(),
+                            queue_wait_ms=round((began - queued_at) * 1000, 2))
             session = self.db.get('sessions', sid)
             pending = session.get('planning_task')
             try:
-                await self.discover_tools()
                 instructions = (
                     f'你是CampusPilot新生入学助手。此项目使用合成校园数据，演示日期{self.config.demo_date}，时区Asia/Shanghai。'
                     '校区只有mingde(明德)、zhiyuan(致远)。只用工具取得政策、金额、时间、地点，禁止猜测。'
@@ -162,35 +196,57 @@ class Assistant:
                         '地图坐标必须来自工具或用户提供；天气只回答接口日期。学校课表与个人平台尚未接入。'
                         '来源冲突须说明差异，不把旧资料当新政策。'
                         + ('当前有待补充规划任务；通过delegate_plan继续提交明确条件。' if pending and pending.get('state') == 'input-required' else ''))
-                state = await self.graph.ainvoke({'messages': [{'role': 'system', 'content': instructions}] +
+                instructions += (
+                    '单条个人待办必须用request_todo_create，不能用delegate_plan生成无关整单。'
+                    '查询个人事项必须本轮调用list_todos等工具，不得把历史空列表当当前状态。'
+                    '删除待办暂不支持，必须明确说明；可以查询或申请状态修改。'
+                    '用户说保存或不保存时，应用会处理已有确认操作，不应重新生成计划。')
+                state = {'messages': [{'role': 'system', 'content': instructions}] +
                      session['messages'] + [{'role': 'user', 'content': initial['message']}],
                      'session_id': sid, 'user_id': session['user_id'], 'turn_id': turn_id, 'trace': [], 'evidence': {},
                      'usage': {'prompt_tokens': 0, 'completion_tokens': 0, 'total_tokens': 0},
-                     'steps': 0, 'calls': 0, 'searches': 0, 'stop': False, 'pending_actions': [], 'plan_id': None},
-                    config={'recursion_limit': 20})
+                     'steps': 0, 'calls': 0, 'searches': 0, 'stop': False, 'pending_actions': [], 'plan_id': None,
+                     'workflow_outcome': 'response_generated', 'tool_errors': [], 'model_calls': []}
+                control = await self._conversation_control(initial, session)
+                if control is not None:
+                    state.update(control)
+                else:
+                    await self.discover_tools()
+                    state = await self.graph.ainvoke(state, config={'recursion_limit': 20})
                 reply = state.get('reply') or '本轮达到调用预算，请缩小问题范围或补充条件。'
                 cited = re.findall(r'\[(E-[^\]\s]+)\]', reply)
                 if any(c not in state['evidence'] for c in cited):
+                    state['workflow_outcome'] = 'guard_rejected'
                     reply = '生成结果引用了无法核实的资料编号，本轮未提供可靠答案，请重新查询。'
                     cited = []
                 elif state['searches'] and state['evidence'] and not cited and not state.get('plan_id'):
+                    state['workflow_outcome'] = 'guard_rejected'
                     reply = '已检索到资料，但生成结果未提供可核查引用，本轮未提供可靠答案，请重新查询。'
                 # Preserve complete tool-call/result pairs; never persist the hidden model reasoning.
                 session = self.db.get('sessions', sid)
                 history = state['messages'][1:]
-                if not history or history[-1].get('content') != reply or history[-1]['role'] != 'assistant':
+                if history and history[-1]['role'] == 'assistant' and not history[-1].get('tool_calls'):
+                    # Don't feed a rejected model answer back as conversation fact.
+                    history[-1] = {'role': 'assistant', 'content': reply}
+                else:
                     history.append({'role': 'assistant', 'content': reply})
                 session.update(messages=history, evidence=state['evidence'])
+                if state['pending_actions'] and state.get('workflow_outcome') != 'guard_rejected':
+                    session['active_actions'] = state['pending_actions']
                 self.db.put('sessions', sid, session)
                 self.patch_turn(turn_id, status='completed', reply=reply, citations=list(dict.fromkeys(cited)),
                     evidence=list(state['evidence'].values()), trace=state['trace'], usage=state['usage'],
                     pending_actions=state['pending_actions'], plan_id=state.get('plan_id'),
+                    workflow_outcome=state.get('workflow_outcome', 'response_generated'),
+                    tool_errors=state.get('tool_errors', []), model_calls=state.get('model_calls', []),
                     latency_ms=round((time.perf_counter() - began) * 1000, 2))
             except asyncio.CancelledError:
-                self.patch_turn(turn_id, status='interrupted', reply='处理已中断，已保存事项保持不变。')
+                self.patch_turn(turn_id, status='interrupted', workflow_outcome='interrupted',
+                                reply='处理已中断，已保存事项保持不变。')
                 raise
             except Exception as exc:
                 self.patch_turn(turn_id, status='failed', reply=f'本轮处理失败（{type(exc).__name__}），请检查服务状态。',
+                                workflow_outcome='failed',
                                 error_type=type(exc).__name__, latency_ms=round((time.perf_counter() - began) * 1000, 2))
 
     def _graph(self):
@@ -203,8 +259,15 @@ class Assistant:
         return graph.compile()
 
     async def _think(self, state):
+        if state['steps'] == 0 and checklist_request(state['messages'][-1].get('content', '')):
+            # Both REST and Gradio use this same engine. Preserve user context as
+            # data; the planner still extracts/asks for missing conditions via A2A.
+            request = '\n'.join(m['content'] for m in state['messages'] if m['role'] == 'user')[-10000:]
+            return {'messages': state['messages'] + [tool_message('delegate_plan', {'request': request})],
+                    'steps': 1, 'stop': False}
         if state['steps'] >= 6:
-            return {'stop': True, 'reply': '已达到本轮调用预算，未执行额外操作。请缩小任务范围。'}
+            return {'stop': True, 'workflow_outcome': 'budget_exhausted',
+                    'reply': '已达到本轮调用预算，未执行额外操作。请缩小任务范围。'}
         reply, usage = await self.model.respond(state['messages'], self.tool_schemas)
         used = {k: state['usage'].get(k, 0) + usage.get(k, 0) for k in state['usage']}
         return {'messages': state['messages'] + [reply], 'usage': used, 'steps': state['steps'] + 1,
@@ -235,6 +298,17 @@ class Assistant:
                     action = self.propose_action(state['session_id'], 'update_todo_status', args)
                     state['pending_actions'].append(action['id'])
                     result = success({'message': '已生成待确认操作，尚未修改待办', 'action_id': action['id']})
+                elif name == 'request_todo_create':
+                    todo = PersonalTodo.model_validate(args).checked()
+                    action = self.propose_action(state['session_id'], 'create_personal_todo', todo.model_dump(mode='json'))
+                    state['pending_actions'].append(action['id'])
+                    state['workflow_outcome'] = 'preview_ready'
+                    state['reply'] = ('个人待办预览，尚未保存：\n- ' + todo.title +
+                        (f'；截止 {todo.due_date}' if todo.due_date else '；无截止日期') +
+                        (f'；个人提醒 {todo.start.isoformat()}—{todo.end.isoformat()}' if todo.start else '；不设提醒') +
+                        '\n这是用户指定的个人事项，不是校方预约或截止政策。确认保存后才写入；也可拒绝。')
+                    state['stop'] = True
+                    result = success({'message': state['reply'], 'action_id': action['id']})
                 else:
                     if name == 'search_knowledge':
                         if state['searches'] >= 2:
@@ -247,14 +321,53 @@ class Assistant:
                     else:
                         result = await gateway.call(name, args)
                     data = result.get('data')
+                    for evidence in result.get('evidence', []):
+                        state['evidence'][evidence['evidence_id']] = evidence
                     if isinstance(data, dict):
                         for evidence in data.get('evidence', []):
                             state['evidence'][evidence['evidence_id']] = evidence
             except (ValueError, TypeError, ValidationError) as exc:
                 result = failure('invalid_arguments', str(exc)[:500])
+            if not result.get('ok'):
+                state.setdefault('tool_errors', []).append({'tool': name,
+                    'code': result.get('error', {}).get('code', 'unknown')})
+                state['workflow_outcome'] = 'tool_failed'
             messages.append({'role': 'tool', 'tool_call_id': call['id'], 'content': dumps(result)})
         self.patch_turn(state['turn_id'], trace=state['trace'], usage=state['usage'])
         return {**state, 'messages': messages}
+
+    async def _conversation_control(self, initial, session):
+        """Only exact user commands authorize the currently displayed action."""
+        choice = decision(initial['message'])
+        if choice:
+            ids = session.get('active_actions', [])
+            if not ids:
+                shown = {aid for t in self.db.all('turns') if t['session_id'] == session['id']
+                         and t['status'] == 'completed' and t.get('workflow_outcome') == 'preview_ready'
+                         for aid in t.get('pending_actions', [])}
+                ids = [a['id'] for a in self.db.all('actions') if a['session_id'] == session['id']
+                       and a['id'] in shown and a['status'] in ('pending', 'retryable')]
+            actions = [self.db.get('actions', aid) for aid in ids]
+            actions = [a for a in actions if a and a['user_id'] == session['user_id'] and a['session_id'] == session['id']]
+            if len(actions) != 1:
+                return {'reply': '没有唯一可确认的操作。请在对应预览轮次使用确认或拒绝按钮；未写入任何事项。',
+                        'workflow_outcome': 'needs_input'}
+            action = actions[0]
+            result = await (self._reject_locked(action['id']) if choice == 'reject' else self._confirm_locked(action['id']))
+            return {'reply': action_result(result, choice == 'reject'), 'pending_actions': [action['id']],
+                    'trace': [{'protocol': 'confirmation', 'operation': choice, 'action_id': action['id'],
+                               'status': 'ok' if result.get('ok') else 'error'}],
+                    'workflow_outcome': ('action_rejected' if choice == 'reject' else 'action_completed')
+                                        if result.get('ok') else 'tool_failed'}
+        if todo_query(initial['message']) or todo_deletion(initial['message']):
+            trace = []
+            result = await MCPGateway(self.config, trace=trace).call('list_todos', {'user_id': session['user_id']})
+            return {'reply': ('暂不支持删除待办，未执行删除。可在个人事项面板选择并标记完成。\n'
+                              if todo_deletion(initial['message']) else '') + render_todos(result),
+                    'evidence': {e['evidence_id']: e for e in result.get('evidence', [])}, 'trace': trace,
+                    'workflow_outcome': 'response_generated' if result.get('ok') else 'tool_failed',
+                    'tool_errors': [] if result.get('ok') else [{'tool': 'list_todos', 'code': result['error']['code']}]}
+        return None
 
     async def _delegate(self, args, state):
         session = self.db.get('sessions', state['session_id'])
@@ -296,12 +409,16 @@ class Assistant:
                 await asyncio.sleep(0.3)
                 task = await self.planner.get(task_id)
             if status == 'input-required':
+                state['workflow_outcome'] = 'needs_input'
                 metadata = (task['status'].get('message') or {}).get('metadata') or {}
                 state['trace'].extend(metadata.get('trace', []))
+                state.setdefault('model_calls', []).extend(metadata.get('model_calls', []))
                 for key, value in metadata.get('usage', {}).items():
                     state['usage'][key] = state['usage'].get(key, 0) + value
                 return success({'message': task_text(task), 'task_id': task_id})
             if status != 'completed':
+                metadata = (task['status'].get('message') or {}).get('metadata') or {}
+                state.setdefault('model_calls', []).extend(metadata.get('model_calls', []))
                 return failure(status, task_text(task) or '规划未完成；未保存任何日程。')
             artifact = task_artifact(task)
             if not artifact:
@@ -313,15 +430,17 @@ class Assistant:
             session['last_plan_id'] = plan.plan_id
             self.db.put('sessions', session['id'], session)
             for old in self.db.all('actions'):
-                if old.get('plan_id') == plan.plan_id and old['status'] == 'pending':
+                if old['session_id'] == state['session_id'] and old['tool'] == 'apply_plan' and old['status'] in ('pending', 'retryable'):
                     old['status'] = 'stale'
                     self.db.put('actions', old['id'], old)
             state['plan_id'] = plan.plan_id
+            state['workflow_outcome'] = 'preview_ready'
             if plan.items:
                 action = self.propose_action(state['session_id'], 'apply_plan', {'snapshot': plan.model_dump(mode='json')},
                                              plan_id=plan.plan_id, plan_version=plan.version)
                 state['pending_actions'].append(action['id'])
             state['trace'].extend(artifact.get('trace', []))
+            state.setdefault('model_calls', []).extend(artifact.get('model_calls', []))
             state['trace'].append({'protocol': 'A2A', 'task_id': task_id, 'operation': 'artifact_received',
                                     'latency_ms': round((time.perf_counter() - began) * 1000, 2)})
             for k, v in artifact.get('usage', {}).items():
@@ -375,13 +494,15 @@ class Assistant:
                         'message': '请确认将已保存计划同步到上述目标日历；尚未执行外部写入。'})
 
     def propose_action(self, session_id, tool, arguments, **extra):
-        if tool not in {'apply_plan', 'update_todo_status', 'sync_plan_calendar'}:
+        if tool not in {'apply_plan', 'create_personal_todo', 'update_todo_status', 'sync_plan_calendar'}:
             raise ValueError('未知写入操作')
         session = self.db.get('sessions', session_id)
         if not session:
             raise HTTPException(404, '会话不存在')
         action = {'id': str(uuid.uuid4()), 'session_id': session_id, 'user_id': session.get('user_id', 'demo-user'),
-                  'tool': tool, 'arguments': arguments, 'status': 'pending', **extra}
+                  'tool': tool, 'arguments': arguments, 'status': 'pending',
+                  'model_mode': self.config.mode, 'cohort': session.get('cohort', 'unclassified'),
+                  'usage_purpose': session.get('usage_purpose', 'unclassified'), **extra}
         self.db.put('actions', action['id'], action)
         return action
 
@@ -390,34 +511,41 @@ class Assistant:
         if not action:
             return failure('not_found', '确认操作不存在')
         async with self.locks.setdefault(action['session_id'], asyncio.Lock()):
-            action = self.db.get('actions', action_id)
-            if action['status'] == 'completed':
-                return action['result']
-            if action['status'] not in ('pending', 'retryable'):
-                return failure('conflict', '此操作已拒绝或过期')
-            if action.get('plan_id'):
-                latest = self.db.get('plans', action['plan_id'])
-                if not latest or latest['version'] != action['plan_version']:
-                    action['status'] = 'stale'
-                    self.db.put('actions', action_id, action)
-                    return failure('conflict', '计划已更新，请重新预览')
-            args = {**action['arguments'], 'operation_id': action_id}
-            if action['tool'] in {'update_todo_status', 'sync_plan_calendar'}:
-                args['user_id'] = action['user_id']
-            trace = []
-            result = await MCPGateway(self.config, writer=True, trace=trace).call(action['tool'], args)
-            action.update(status='completed' if result.get('ok') else 'retryable', result=result, trace=trace)
-            self.db.put('actions', action_id, action)
-            return result
+            return await self._confirm_locked(action_id)
+
+    async def _confirm_locked(self, action_id):
+        action = self.db.get('actions', action_id)
+        if action['status'] == 'completed':
+            return action['result']
+        if action['status'] not in ('pending', 'retryable'):
+            return failure('conflict', '此操作已拒绝或过期')
+        if action.get('plan_id'):
+            latest = self.db.get('plans', action['plan_id'])
+            if not latest or latest['version'] != action['plan_version']:
+                action['status'] = 'stale'
+                self.db.put('actions', action_id, action)
+                return failure('conflict', '计划已更新，请重新预览')
+        args = {**action['arguments'], 'operation_id': action_id}
+        if action['tool'] in {'create_personal_todo', 'update_todo_status', 'sync_plan_calendar'}:
+            args['user_id'] = action['user_id']
+        trace = []
+        result = await MCPGateway(self.config, writer=True, trace=trace).call(action['tool'], args)
+        action.update(status='completed' if result.get('ok') else 'retryable', result=result, trace=trace,
+                      attempted_at=time.time(), error_code=(result.get('error') or {}).get('code'))
+        self.db.put('actions', action_id, action)
+        return result
 
     async def reject(self, action_id):
         action = self.db.get('actions', action_id)
         if not action:
             return failure('not_found', '操作不存在')
         async with self.locks.setdefault(action['session_id'], asyncio.Lock()):
-            action = self.db.get('actions', action_id)
-            if action['status'] == 'completed':
-                return failure('conflict', '已执行操作不能通过拒绝撤销')
-            action['status'] = 'rejected'
-            self.db.put('actions', action_id, action)
-            return success({'status': 'rejected'})
+            return await self._reject_locked(action_id)
+
+    async def _reject_locked(self, action_id):
+        action = self.db.get('actions', action_id)
+        if action['status'] == 'completed':
+            return failure('conflict', '已执行操作不能通过拒绝撤销')
+        action['status'] = 'rejected'
+        self.db.put('actions', action_id, action)
+        return success({'status': 'rejected'})

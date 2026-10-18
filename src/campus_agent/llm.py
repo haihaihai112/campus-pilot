@@ -3,12 +3,15 @@ from __future__ import annotations
 import json
 import re
 import uuid
+import time
+from urllib.parse import urlsplit
 from datetime import datetime, timedelta
 
 import httpx
 from openai import AsyncOpenAI
 
 from .config import Settings
+from .telemetry import MODEL_CALLS
 
 
 def function_tool(name, description, schema):
@@ -22,16 +25,35 @@ class Model:
         if config.mode == 'live':
             if not config.api_key:
                 raise ValueError('真实模型模式需要 LLM_API_KEY；无密钥测试请显式设置 MODEL_MODE=fixture')
-            self.client = AsyncOpenAI(api_key=config.api_key, base_url=config.base_url, timeout=60, max_retries=1,
+            # One recorded invocation per outbound attempt; implicit retries hide billable failures.
+            self.client = AsyncOpenAI(api_key=config.api_key, base_url=config.base_url, timeout=60, max_retries=0,
                                       http_client=httpx.AsyncClient(transport=httpx.AsyncHTTPTransport(local_address='0.0.0.0'), timeout=60))
 
     async def respond(self, messages, tools):
         if self.config.mode == 'fixture':
             return fixture_response(messages, tools, self.config), {'prompt_tokens': 0, 'completion_tokens': 0, 'total_tokens': 0}
         extra = {'extra_body': {'enable_thinking': False}} if 'dashscope.aliyuncs.com' in self.config.base_url else {}
-        response = await self.client.chat.completions.create(
-            model=self.config.model, messages=messages, tools=tools or None, temperature=0.1,
-            max_tokens=1800, **extra)
+        record = {'call_id': uuid.uuid4().hex, 'requested_model': self.config.model, 'response_model': None,
+                  'endpoint_host': urlsplit(self.config.base_url).hostname,
+                  'status': 'failed', 'usage_reported': False,
+                  'prompt_tokens': None, 'completion_tokens': None, 'total_tokens': None}
+        began = time.perf_counter()
+        try:
+            response = await self.client.chat.completions.create(
+                model=self.config.model, messages=messages, tools=tools or None, temperature=0.1,
+                max_tokens=1800, **extra)
+            record.update(response_model=response.model, status='completed', usage_reported=response.usage is not None)
+            if response.usage is not None:
+                record.update({k: getattr(response.usage, k, None)
+                    for k in ('prompt_tokens', 'completion_tokens', 'total_tokens')})
+        except BaseException as exc:
+            record['error_type'] = type(exc).__name__
+            raise
+        finally:
+            record['latency_ms'] = round((time.perf_counter() - began) * 1000, 2)
+            collector = MODEL_CALLS.get()
+            if collector is not None:
+                collector.append(record)
         message = response.choices[0].message
         value = {'role': 'assistant', 'content': message.content or ''}
         if message.tool_calls:

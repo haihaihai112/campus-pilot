@@ -5,6 +5,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 from dataclasses import dataclass, field
 from pathlib import Path
+from urllib.parse import urlsplit
 
 from dotenv import load_dotenv
 
@@ -54,6 +55,7 @@ class Settings:
     calendar_provider: str = field(default_factory=lambda: os.getenv('CALENDAR_PROVIDER', 'none'))
     auth_mode: str = field(default_factory=lambda: os.getenv('AUTH_MODE', 'demo'))
     cookie_secure: bool = field(default_factory=lambda: os.getenv('COOKIE_SECURE', 'true').lower() == 'true')
+    public_origin: str = field(default_factory=lambda: os.getenv('CAMPUS_PUBLIC_ORIGIN', '').rstrip('/'))
     login_ttl_hours: int = field(default_factory=lambda: int(os.getenv('LOGIN_TTL_HOURS', '24')))
     requests_per_minute: int = field(default_factory=lambda: int(os.getenv('REQUESTS_PER_MINUTE', '240')))
     turns_per_hour: int = field(default_factory=lambda: int(os.getenv('TURNS_PER_HOUR', '20')))
@@ -62,6 +64,11 @@ class Settings:
     max_pending_per_user: int = field(default_factory=lambda: int(os.getenv('MAX_PENDING_PER_USER', '2')))
 
     def __post_init__(self):
+        if self.public_origin:
+            origin = urlsplit(self.public_origin)
+            if (origin.scheme != 'https' or not origin.hostname or origin.username or origin.password
+                    or origin.path or origin.query or origin.fragment or not self.cookie_secure):
+                raise ValueError('CAMPUS_PUBLIC_ORIGIN requires an HTTPS origin and COOKIE_SECURE=true')
         self.runtime.mkdir(parents=True, exist_ok=True)
         if self.data_profile not in {'synthetic', 'whut-2026'}:
             raise ValueError('CAMPUS_DATA_PROFILE must be whut-2026 or synthetic')

@@ -4,7 +4,7 @@
 
 CampusPilot 是面向新生入学咨询、办理清单和个人提醒的 Agent 工作台。主助手通过 MCP 查询知识与校园工具，通过 A2A 委派独立规划 Agent；用户确认后，系统才保存个人待办或日历记录。
 
-当前版本为 **v0.3.1**。默认知识库采用武汉理工大学 2026 级本科公开资料的 2026-10-11 快照，实际入库 4 份官方来源、覆盖 11 类办理模板。这是个人开发项目，未接入学校个人业务系统。
+当前为 **v0.3.1 + 2026-10-18 试用准备更新**。默认知识库采用武汉理工大学 2026 级本科公开资料的 2026-10-11 快照，实际入库 4 份官方来源、覆盖 11 类办理模板。这是个人开发项目，未接入学校个人业务系统。
 
 ## 能做什么
 
@@ -16,6 +16,16 @@ CampusPilot 是面向新生入学咨询、办理清单和个人提醒的 Agent �
 - 保留规划服务故障降级、任务取消和重启中断记录，避免静默重跑写入。
 
 学校未公布的时段不会被编造为预约。过期入学节点会提示联系学校核实补办，个人提醒也不代表校方预约或主动通知服务。
+
+## 2026-10-18 更新
+
+- 待办查询直接读取本人 MCP 数据；单条待办先预览、后确认，支持拒绝保存和旧草案失效处理。
+- 工作台采用主聊天与侧栏说明，历史、个人事项、来源和反馈按需展开，支持 Enter 发送、Shift+Enter 换行。
+- 按账号类别、真实/fixture 模式、轮次状态、确认写入、人工复核和逐调用 Token 分别统计；提供费用估算、离线排队模拟、SQLite 停机备份与新目录恢复。
+- 新增课表与住宿的只读数据契约，验证来源时间、查询范围和记录归属；接口默认未接通，不代表学校已授权或真实个人数据已接入。
+- 新增本机 HTTPS 隧道启停脚本及受控公开来源检查。临时入口依赖本机和隧道，地址不作为永久公开链接。
+
+试用按先访谈 5 人、再累计 5 → 15–20 → 50–70 人规划；这是目标，不是实际使用人数或已验证吞吐。见[试用工作包](docs/pilot/README.md)、[学校接入契约](docs/SCHOOL_INTEGRATION.md)和[项目报告](docs/RESUME_PROJECT.md)。
 
 ## 技术与架构
 
@@ -77,7 +87,7 @@ uv run --no-sync campus all --fixture
 uv run --no-sync campus init-pilot
 $env:CAMPUS_ENV_FILE = Join-Path (Get-Location) '.env.pilot'
 uv run --no-sync campus accounts add student01
-./scripts/start-pilot.ps1 -Fixture
+pwsh -NoProfile -File ./scripts/start-pilot.ps1 -Fixture
 ```
 
 打开[登录页](http://127.0.0.1:8010/login)。账号通过命令逐个创建，不开放自助注册；密码由交互输入，至少 12 个字符。`init-pilot` 生成三份独立私有服务凭据，已有 `.env.pilot` 时拒绝覆盖。
@@ -93,9 +103,9 @@ LLM_MODEL=your-tool-calling-model
 LLM_BASE_URL=https://your-provider.example/v1
 ```
 
-模型和地址必须属于同一可用服务商，模型需要支持原生 `tool_calls`。然后运行 `./scripts/start-pilot.ps1`，或在设置 `CAMPUS_ENV_FILE` 后运行 `uv run --no-sync campus all`。在线模式会消耗所配置服务的额度；勿提交配置文件或凭据。
+模型和地址必须属于同一可用服务商，模型需要支持原生 `tool_calls`。然后运行 `pwsh -NoProfile -File ./scripts/start-pilot.ps1`，或在设置 `CAMPUS_ENV_FILE` 后运行 `uv run --no-sync campus all`。在线模式会消耗所配置服务的额度；勿提交配置文件或凭据。
 
-本地 HTTP 的初始化配置使用 `COOKIE_SECURE=false`。远程邀请体验需要 HTTPS 与 `COOKIE_SECURE=true`，具体部署和备份要求见[邀请体验部署](docs/PILOT.md)。统计和账号管理命令应使用同一配置文件：
+本地 HTTP 的初始化配置使用 `COOKIE_SECURE=false`。远程邀请体验需要 HTTPS 与 `COOKIE_SECURE=true`，具体部署和备份要求见[邀请体验部署](docs/PILOT.md)。本机临时 HTTPS 可运行 `pwsh -NoProfile -File ./scripts/start-https.ps1`，停止用 `pwsh -NoProfile -File ./scripts/stop-https.ps1`；先配置同一 `.env.pilot`、邀请账号与模型。地址读取及运行条件见[HTTPS 说明](docs/pilot/HTTPS_LOCAL.md)。统计和账号管理命令应使用同一配置文件：
 
 ```powershell
 uv run --no-sync campus accounts list
@@ -104,6 +114,8 @@ uv run --no-sync campus stats
 ```
 
 ## 检查与验证记录
+
+2026-10-18 发布副本以 fixture、独立运行目录及隔离环境重跑现有离线回归；实际结果见[发布检查](docs/PUBLICATION.md)。历史资料迁移、开发者真实模型回归及临时 HTTPS 验证分别记录，不能合并为模型正确率或学生使用成果。
 
 ```powershell
 uv run --no-sync pytest -q --junitxml=reports/tests-local.xml
@@ -122,10 +134,10 @@ v0.3.1 的[历史验证摘要](reports/whut-verification-v0.3.1-2026-10-11.json)
 ## 范围与限制
 
 - 仅核对 2026 级本科的 4 份来源。专业学费和交通图片未转录，研究生、其他年份、个人金额、宿舍分配和报到窗口未验证。
-- 当前 WHUT 版本未完成真实模型质量评测。更早合成知识库的检索指标或在线模型轨迹不代表此版本效果。
+- 当前 WHUT 版本已有一次真实 DeepSeek 开发者回归，尚未完成独立模型质量评测。更早合成知识库的检索指标或在线模型轨迹不代表此版本效果。
 - Milvus/BGE、地图天气真实调用和 Docker 容器运行尚未验证；Compose 配置解析记录不等于容器已运行。
-- 外部日历未绑定平台，学校通知和课表只有接口预留；不执行缴费、教务或资助审批。
-- 尚无公网生产部署、真实用户规模或 50 至 100 人负载实测。队列和并发控制限于单进程，不应直接增加多个 worker。
+- 外部日历未绑定平台；学校课表与住宿完成只读契约但尚未接入授权数据源，通知仍为预留；不执行缴费、教务或资助审批。
+- 已验证本机临时 HTTPS 邀请入口，尚无固定云部署、真实学生使用人数或 50–70 人负载实测。队列和并发控制限于单进程，不应直接增加多个 worker。
 - 账号隔离在主应用边界执行，MCP/A2A 是受信任内部服务，不是独立的多租户授权服务。
 
 ## 文档导航

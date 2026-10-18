@@ -7,7 +7,7 @@ from icalendar import Calendar, Event
 
 from .config import Settings
 from .db import Store, dumps
-from .models import Plan, failure, success
+from .models import PersonalTodo, Plan, failure, success
 from .scheduler import validate_plan
 from .seed import load_seed
 from .advisory import validate_checklist
@@ -49,10 +49,38 @@ class Campus:
                         'notice': '没有已核实的通行时间，不以默认值替代' if not values else '合成测试数据'})
 
     def todos(self, user_id='demo-user'):
-        return success([v for v in self.store.all('todos') if v['user_id'] == user_id])
+        rows = [v for v in self.store.all('todos') if v['user_id'] == user_id]
+        ids = {eid for row in rows for eid in row.get('evidence_ids', [])}
+        # Resolve stored IDs against this service's current source set, never trust
+        # a model-supplied ID or treat a personal todo as a school policy source.
+        return {**success(rows), 'evidence': [d for d in self.data['documents'] if d['evidence_id'] in ids]}
+
+    def create_todo(self, title, operation_id, user_id='demo-user', due_date=None, start=None, end=None):
+        try:
+            todo = PersonalTodo(title=title, due_date=due_date, start=start, end=end).checked()
+        except ValueError:
+            return failure('invalid_arguments', '标题、日期或提醒起止时间无效')
+        payload = dumps(['create_personal_todo', user_id, todo.model_dump(mode='json')])
+        with self.store.connect() as db:
+            db.execute('BEGIN IMMEDIATE')
+            old = self.store.get('operations', operation_id, con=db)
+            if old:
+                return old['result'] if old['digest'] == payload else failure('conflict', '幂等键内容不一致')
+            key = 'personal:' + operation_id
+            row = {'id': key, 'user_id': user_id, 'plan_id': None, 'plan_version': None,
+                   **todo.model_dump(mode='json'), 'kind': 'personal_reminder' if todo.start else 'personal_todo',
+                   'status': 'pending', 'version': 1, 'materials': [], 'evidence_ids': [],
+                   'location': '', 'location_name': '', 'timing_note': '用户指定的个人事项，不是校方预约或截止政策'}
+            self.store.put('todos', key, row, db)
+            if todo.start:
+                self.store.put('events', key, row, db)
+            result = success({'todo_id': key, 'todos_created': 1, 'events_created': int(bool(todo.start))})
+            self.store.put('operations', operation_id, {'digest': payload, 'result': result}, db)
+            return result
 
     def events(self, user_id='demo-user', start_date=None, end_date=None, exclude_plan_id=None, con=None):
-        values = [v for v in self.store.all('events', con) if v['user_id'] == user_id and v['plan_id'] != exclude_plan_id]
+        values = [v for v in self.store.all('events', con) if v['user_id'] == user_id
+                  and (exclude_plan_id is None or v['plan_id'] != exclude_plan_id)]
         if start_date:
             values = [v for v in values if v['end'][:10] >= start_date]
         if end_date:

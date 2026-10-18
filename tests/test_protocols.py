@@ -46,6 +46,18 @@ async def test_mcp_discovery_auth_and_readonly(stack):
         assert (await client.post(stack.config.campus_url, json={})).status_code == 401
 
 
+async def test_personal_todo_write_scope_isolation_and_idempotency(stack):
+    args = {'title': '联系辅导员', 'due_date': '2026-10-23', 'operation_id': 'personal-protocol', 'user_id': 'personal-alice'}
+    reader, writer = MCPGateway(stack.config), MCPGateway(stack.config, writer=True)
+    assert (await reader.call('create_personal_todo', args))['error']['code'] == 'forbidden'
+    saved = await writer.call('create_personal_todo', args)
+    assert saved['ok'] and saved['data']['todos_created'] == 1 and saved['data']['events_created'] == 0
+    assert await writer.call('create_personal_todo', args) == saved
+    assert (await reader.call('list_todos', {'user_id': 'personal-bob'}))['data'] == []
+    own = (await reader.call('list_todos', {'user_id': 'personal-alice'}))['data']
+    assert len(own) == 1 and own[0]['due_date'] == '2026-10-23'
+
+
 async def test_a2a_input_required_resume_artifact(stack):
     client = PlannerClient(stack.config)
     request = PlanRequest(session_id='a2a-test', request='安排入学')
@@ -248,6 +260,7 @@ async def test_external_tools_real_mcp_discovery_and_unconfigured_state(stack):
              ('get_route', {'origin': '116.4,39.9', 'destination': '116.41,39.91'}, 'not_configured'),
              ('search_school_notices', {'query': '开学通知'}, 'not_connected'),
              ('get_timetable', {'start_date': '2026-09-05', 'end_date': '2026-09-12'}, 'not_connected'),
+             ('get_dorm_assignment', {'user_id': 'test-only'}, 'not_connected'),
              ('list_external_calendar_events', {'start': '2026-09-05T00:00:00+08:00',
                                                'end': '2026-09-12T00:00:00+08:00'}, 'not_connected')]
     for name, args, code in cases:

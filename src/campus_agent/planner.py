@@ -22,6 +22,7 @@ from .models import Evidence, PlanRequest
 from .protocols import MCPGateway
 from .scheduler import schedule, validate_plan
 from .advisory import checklist, validate_checklist
+from .telemetry import MODEL_CALLS
 
 
 class SQLiteTaskStore(TaskStore):
@@ -116,6 +117,8 @@ class PlannerExecutor(AgentExecutor):
         task_id = current.id
         updater = TaskUpdater(event_queue, task_id, current.context_id)
         self.active[task_id] = asyncio.current_task()
+        model_calls = []
+        telemetry_token = MODEL_CALLS.set(model_calls)
         try:
             await updater.start_work(updater.new_agent_message([Part(root=TextPart(text='正在核实入学条件与校园信息'))]))
             payload = next(p.root.data for p in context.message.parts if isinstance(p.root, DataPart))
@@ -151,7 +154,8 @@ class PlannerExecutor(AgentExecutor):
                         missing.append('资助路径（生源地贷款或校园地贷款；不确定请先向学校核实）')
                 if missing:
                     await updater.requires_input(updater.new_agent_message([Part(root=TextPart(
-                        text='请补充：' + '、'.join(missing))) ], metadata={'usage': usage, 'trace': trace}), final=True)
+                        text='请补充：' + '、'.join(missing))) ],
+                        metadata={'usage': usage, 'trace': trace, 'model_calls': model_calls}), final=True)
                     return
                 await updater.start_work(updater.new_agent_message([Part(root=TextPart(text='正在核实公开规定、办理清单与已有个人日程'))]))
                 if self.config.data_profile == 'whut-2026':
@@ -196,7 +200,8 @@ class PlannerExecutor(AgentExecutor):
                     return
                 self.store.put('plans', plan.plan_id, plan.model_dump(mode='json'))
                 await updater.add_artifact([Part(root=DataPart(data={'plan': plan.model_dump(mode='json'),
-                    'trace': trace, 'usage': usage, 'model_mode': self.config.mode}))], name='onboarding-plan')
+                    'trace': trace, 'usage': usage, 'model_calls': model_calls,
+                    'model_mode': self.config.mode}))], name='onboarding-plan')
                 await updater.complete(updater.new_agent_message([Part(root=TextPart(text='计划已生成，尚未保存待办和日程。'))]))
         except asyncio.CancelledError:
             if task_id not in self.canceled:
@@ -204,8 +209,12 @@ class PlannerExecutor(AgentExecutor):
         except Exception as exc:
             self.store.put('errors', task_id, {'type': type(exc).__name__, 'message': str(exc)[:1000]})
             reason = str(exc)[:300] if isinstance(exc, ValueError) else '请检查输入或服务状态'
-            await updater.failed(updater.new_agent_message([Part(root=TextPart(text=f'规划失败：{type(exc).__name__}；{reason}。'))]))
+            await updater.failed(updater.new_agent_message(
+                [Part(root=TextPart(text=f'规划失败：{type(exc).__name__}；{reason}。'))],
+                metadata={'model_calls': model_calls}))
         finally:
+            self.store.put('model_call_records', task_id, {'task_id': task_id, 'model_calls': model_calls})
+            MODEL_CALLS.reset(telemetry_token)
             self.active.pop(task_id, None)
 
     async def cancel(self, context, event_queue):

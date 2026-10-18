@@ -142,8 +142,26 @@ class PilotMiddleware:
                 await send({'type': 'websocket.close', 'code': 1008})
                 return
             return await self.app(scope, receive, send)
-        request = Request(scope)
         path = scope.get('path', '')
+        if self.config.public_origin:
+            origin = urlsplit(self.config.public_origin)
+            host = Request(scope).headers.get('host', '')
+            local_health = path == '/health' and host.split(':')[0] in {'127.0.0.1', 'localhost'}
+            if host != origin.netloc and not local_health:
+                return await JSONResponse({'detail': '访问地址不匹配'}, status_code=421)(scope, receive, send)
+            if not local_health:
+                # Pin the operator's HTTPS termination origin, rather than trust
+                # absent/incorrect or client-supplied proxy headers from a tunnel.
+                scope = {**scope, 'scheme': 'https'}
+                downstream_send = send
+
+                async def https_send(message):
+                    if message['type'] == 'http.response.start':
+                        message = {**message, 'headers': list(message.get('headers', [])) +
+                                   [(b'strict-transport-security', b'max-age=86400')]}
+                    await downstream_send(message)
+                send = https_send
+        request = Request(scope)
         if self.config.auth_mode == 'demo':
             scope.setdefault('state', {})['user_id'] = 'demo-user'
             return await self.app(scope, receive, send)

@@ -1,0 +1,342 @@
+{
+  "status": "not_run",
+  "model_config": {
+    "endpoint_host": null,
+    "requested_model": null,
+    "response_model": null,
+    "mode": null
+  },
+  "budget_confirmed": false,
+  "per_case": [
+    {
+      "case_id": "CP01",
+      "outcome": null,
+      "semantic_support": null,
+      "tool_execution": null,
+      "queue_ms": null,
+      "processing_ms": null,
+      "calls": [],
+      "failure_reason": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "CP02",
+      "outcome": null,
+      "semantic_support": null,
+      "tool_execution": null,
+      "queue_ms": null,
+      "processing_ms": null,
+      "calls": [],
+      "failure_reason": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "CP03",
+      "outcome": null,
+      "semantic_support": null,
+      "tool_execution": null,
+      "queue_ms": null,
+      "processing_ms": null,
+      "calls": [],
+      "failure_reason": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "CP04",
+      "outcome": null,
+      "semantic_support": null,
+      "tool_execution": null,
+      "queue_ms": null,
+      "processing_ms": null,
+      "calls": [],
+      "failure_reason": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "CP05",
+      "outcome": null,
+      "semantic_support": null,
+      "tool_execution": null,
+      "queue_ms": null,
+      "processing_ms": null,
+      "calls": [],
+      "failure_reason": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "CP06",
+      "outcome": null,
+      "semantic_support": null,
+      "tool_execution": null,
+      "queue_ms": null,
+      "processing_ms": null,
+      "calls": [],
+      "failure_reason": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "CP07",
+      "outcome": null,
+      "semantic_support": null,
+      "tool_execution": null,
+      "queue_ms": null,
+      "processing_ms": null,
+      "calls": [],
+      "failure_reason": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "CP08",
+      "outcome": null,
+      "semantic_support": null,
+      "tool_execution": null,
+      "queue_ms": null,
+      "processing_ms": null,
+      "calls": [],
+      "failure_reason": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "CP09",
+      "outcome": null,
+      "semantic_support": null,
+      "tool_execution": null,
+      "queue_ms": null,
+      "processing_ms": null,
+      "calls": [],
+      "failure_reason": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "CP10",
+      "outcome": null,
+      "semantic_support": null,
+      "tool_execution": null,
+      "queue_ms": null,
+      "processing_ms": null,
+      "calls": [],
+      "failure_reason": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "CP11",
+      "outcome": null,
+      "semantic_support": null,
+      "tool_execution": null,
+      "queue_ms": null,
+      "processing_ms": null,
+      "calls": [],
+      "failure_reason": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "CP12",
+      "outcome": null,
+      "semantic_support": null,
+      "tool_execution": null,
+      "queue_ms": null,
+      "processing_ms": null,
+      "calls": [],
+      "failure_reason": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "CP13",
+      "outcome": null,
+      "semantic_support": null,
+      "tool_execution": null,
+      "queue_ms": null,
+      "processing_ms": null,
+      "calls": [],
+      "failure_reason": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "CP14",
+      "outcome": null,
+      "semantic_support": null,
+      "tool_execution": null,
+      "queue_ms": null,
+      "processing_ms": null,
+      "calls": [],
+      "failure_reason": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "CP15",
+      "outcome": null,
+      "semantic_support": null,
+      "tool_execution": null,
+      "queue_ms": null,
+      "processing_ms": null,
+      "calls": [],
+      "failure_reason": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "CP16",
+      "outcome": null,
+      "semantic_support": null,
+      "tool_execution": null,
+      "queue_ms": null,
+      "processing_ms": null,
+      "calls": [],
+      "failure_reason": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "CP17",
+      "outcome": null,
+      "semantic_support": null,
+      "tool_execution": null,
+      "queue_ms": null,
+      "processing_ms": null,
+      "calls": [],
+      "failure_reason": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "CP18",
+      "outcome": null,
+      "semantic_support": null,
+      "tool_execution": null,
+      "queue_ms": null,
+      "processing_ms": null,
+      "calls": [],
+      "failure_reason": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "CP19",
+      "outcome": null,
+      "semantic_support": null,
+      "tool_execution": null,
+      "queue_ms": null,
+      "processing_ms": null,
+      "calls": [],
+      "failure_reason": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "CP20",
+      "outcome": null,
+      "semantic_support": null,
+      "tool_execution": null,
+      "queue_ms": null,
+      "processing_ms": null,
+      "calls": [],
+      "failure_reason": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "CP21",
+      "outcome": null,
+      "semantic_support": null,
+      "tool_execution": null,
+      "queue_ms": null,
+      "processing_ms": null,
+      "calls": [],
+      "failure_reason": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "CP22",
+      "outcome": null,
+      "semantic_support": null,
+      "tool_execution": null,
+      "queue_ms": null,
+      "processing_ms": null,
+      "calls": [],
+      "failure_reason": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "CP23",
+      "outcome": null,
+      "semantic_support": null,
+      "tool_execution": null,
+      "queue_ms": null,
+      "processing_ms": null,
+      "calls": [],
+      "failure_reason": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "CP24",
+      "outcome": null,
+      "semantic_support": null,
+      "tool_execution": null,
+      "queue_ms": null,
+      "processing_ms": null,
+      "calls": [],
+      "failure_reason": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "CP25",
+      "outcome": null,
+      "semantic_support": null,
+      "tool_execution": null,
+      "queue_ms": null,
+      "processing_ms": null,
+      "calls": [],
+      "failure_reason": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "CP26",
+      "outcome": null,
+      "semantic_support": null,
+      "tool_execution": null,
+      "queue_ms": null,
+      "processing_ms": null,
+      "calls": [],
+      "failure_reason": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "CP27",
+      "outcome": null,
+      "semantic_support": null,
+      "tool_execution": null,
+      "queue_ms": null,
+      "processing_ms": null,
+      "calls": [],
+      "failure_reason": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "CP28",
+      "outcome": null,
+      "semantic_support": null,
+      "tool_execution": null,
+      "queue_ms": null,
+      "processing_ms": null,
+      "calls": [],
+      "failure_reason": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "CP29",
+      "outcome": null,
+      "semantic_support": null,
+      "tool_execution": null,
+      "queue_ms": null,
+      "processing_ms": null,
+      "calls": [],
+      "failure_reason": null,
+      "reviewer": null
+    },
+    {
+      "case_id": "CP30",
+      "outcome": null,
+      "semantic_support": null,
+      "tool_execution": null,
+      "queue_ms": null,
+      "processing_ms": null,
+      "calls": [],
+      "failure_reason": null,
+      "reviewer": null
+    }
+  ]
+}

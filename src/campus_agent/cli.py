@@ -17,7 +17,8 @@ from .seed import seed
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('command', choices=['seed', 'rag', 'tools', 'planner', 'app', 'all', 'accounts', 'stats', 'init-pilot'])
+    parser.add_argument('command', choices=['seed', 'rag', 'tools', 'planner', 'app', 'all', 'accounts', 'stats', 'init-pilot',
+                                          'enroll', 'review-turn'])
     parser.add_argument('action', nargs='?', choices=['add', 'list', 'disable'])
     parser.add_argument('username', nargs='?')
     parser.add_argument('--port', type=int)
@@ -25,6 +26,11 @@ def main():
     parser.add_argument('--host', default='127.0.0.1')
     parser.add_argument('--no-ui', action='store_true')
     parser.add_argument('--fixture', action='store_true', help='Explicit deterministic test adapter; not a live model')
+    parser.add_argument('--username', dest='enroll_username')
+    parser.add_argument('--cohort', choices=['participant', 'test', 'developer', 'historical_demo', 'unclassified'])
+    parser.add_argument('--purpose', choices=['current_need', 'historical_demo', 'test', 'unclassified'])
+    parser.add_argument('--turn-id')
+    parser.add_argument('--outcome', choices=['resolved', 'unresolved'])
     args = parser.parse_args()
     if args.fixture:
         os.environ['MODEL_MODE'] = 'fixture'
@@ -33,6 +39,18 @@ def main():
         os.environ['RAG_MCP_URL'] = f'http://127.0.0.1:{args.base_port + 20}/mcp'
         os.environ['CAMPUS_MCP_URL'] = f'http://127.0.0.1:{args.base_port + 30}/mcp'
     config = Settings()
+    if args.command == 'enroll':
+        from .metrics import enroll_account
+        if not args.enroll_username or not args.cohort or not args.purpose:
+            parser.error('enroll requires --username, --cohort and --purpose')
+        print(json.dumps(enroll_account(config, args.enroll_username, args.cohort, args.purpose), ensure_ascii=False))
+        return
+    if args.command == 'review-turn':
+        from .metrics import review_turn
+        if not args.turn_id or not args.outcome:
+            parser.error('review-turn requires --turn-id and --outcome')
+        print(json.dumps(review_turn(config, args.turn_id, args.outcome), ensure_ascii=False))
+        return
     if args.command == 'init-pilot':
         path = ROOT / '.env.pilot'
         # Exclusive creation: never overwrite an operator's secrets or settings.

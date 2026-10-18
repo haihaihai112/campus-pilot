@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import date, datetime
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
@@ -8,6 +8,28 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 class StrictModel(BaseModel):
     model_config = ConfigDict(extra='forbid')
+
+
+class PersonalTodo(StrictModel):
+    title: str = Field(min_length=1, max_length=200)
+    due_date: date | None = None
+    start: datetime | None = None
+    end: datetime | None = None
+
+    @field_validator('title')
+    @classmethod
+    def nonempty_title(cls, value):
+        value = value.strip()
+        if not value:
+            raise ValueError('待办标题不能为空')
+        return value
+
+    def checked(self):
+        if (self.start is None) != (self.end is None):
+            raise ValueError('个人提醒须同时提供明确起止时间')
+        if self.start and (not self.start.tzinfo or not self.end.tzinfo or self.end <= self.start):
+            raise ValueError('个人提醒须包含时区且结束晚于开始')
+        return self
 
 
 class Evidence(StrictModel):

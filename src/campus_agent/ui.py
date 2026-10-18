@@ -9,6 +9,8 @@ import gradio as gr
 from .protocols import MCPGateway
 from .access import owned, request_user
 from .models import ChatRequest
+from .personal import action_result
+from .ui_theme import BRAND, CSS, FEATURES, WELCOME
 
 
 def build_ui(engine):
@@ -35,13 +37,29 @@ def build_ui(engine):
         lines.extend('- ' + a for a in plan['assumptions'])
         return '\n'.join(lines)
 
+    def action_preview(turn, plan):
+        if plan:
+            return plan_markdown(plan)
+        actions = [engine.db.get('actions', aid) for aid in turn.get('pending_actions', [])]
+        lines = []
+        for action in actions:
+            if not action:
+                continue
+            if action['tool'] == 'create_personal_todo':
+                args = action['arguments']
+                lines += ['### 个人待办', args['title'], '截止日期：' + (args.get('due_date') or '未设置'),
+                          '个人提醒：' + (args['start'] + ' → ' + args['end'] if args.get('start') else '未设置'),
+                          '用户指定的个人事项，不是校方预约或截止政策。']
+            lines.append('操作状态：' + action['status'])
+        return '\n\n'.join(lines) or plan_markdown(None)
+
     async def submit(message, sid, history, request: gr.Request):
         if not message.strip():
             raise gr.Error('请输入问题或需要安排的事项')
         body = ChatRequest(message=message, session_id=sid or None)
         turn = engine.enqueue(body.message, body.session_id, user(request))
         history = list(history or []) + [{'role': 'user', 'content': message}]
-        yield '', turn['session_id'], history + [{'role': 'assistant', 'content': '正在处理…'}], '', None, [], '', turn['id'], ''
+        yield '', turn['session_id'], history + [{'role': 'assistant', 'content': '正在处理…'}], '', None, [], '', turn['id'], '', gr.update(visible=False), ''
         while True:
             current = engine.db.get('turns', turn['id'])
             trace = current.get('trace', [])
@@ -51,30 +69,24 @@ def build_ui(engine):
             labels = {'submitted': '规划请求已接收', 'working': '正在核实条件并安排日程',
                       'input-required': '需要补充信息', 'completed': '计划已生成'}
             status_text = labels.get(progress.get('state'), '正在查询所需信息')
-            yield '', turn['session_id'], history + [{'role': 'assistant', 'content': status_text + '…'}], '', None, trace, '', turn['id'], current.get('a2a_task_id', '')
+            yield '', turn['session_id'], history + [{'role': 'assistant', 'content': status_text + '…'}], '', None, trace, '', turn['id'], current.get('a2a_task_id', ''), gr.update(visible=False), ''
             await asyncio.sleep(0.5)
         plan = engine.db.get('plans', current['plan_id']) if current.get('plan_id') else None
         sources = '\n\n'.join(f"**[{e['evidence_id']}] {e['title']}**\n\n{e['text']}\n\n[查看来源](/v1/evidence/{e['evidence_id']})" for e in current.get('evidence', []))
-        yield '', turn['session_id'], history + [{'role': 'assistant', 'content': current['reply']}], plan_markdown(plan), plan, current.get('trace', []), sources, turn['id'], current.get('a2a_task_id', '')
+        yield '', turn['session_id'], history + [{'role': 'assistant', 'content': current['reply']}], action_preview(current, plan), plan, current.get('trace', []), sources, turn['id'], current.get('a2a_task_id', ''), confirmation_visibility(current), ''
 
     async def save(turn_id, request: gr.Request, reject=False):
         if not turn_id:
-            return '请先生成计划。'
+            return '请先生成计划。', gr.update(visible=False)
         turn = require('turns', turn_id, request)
         if not turn or not turn.get('pending_actions'):
-            return '本轮没有待确认操作。'
+            return '本轮没有待确认操作。', gr.update(visible=False)
         results = []
         for action_id in turn['pending_actions']:
             require('actions', action_id, request)
             result = await (engine.reject(action_id) if reject else engine.confirm(action_id))
-            if result.get('ok'):
-                data = result['data']
-                results.append('已拒绝，未执行。' if reject else
-                               f"已保存 {data['todos_created']} 项待办和 {data['events_created']} 项日程。" if 'todos_created' in data else
-                               f"已同步 {data['synced_events']} 项日程。{data.get('notice', '')}" if 'synced_events' in data else '待办状态已更新。')
-            else:
-                results.append('未执行：' + result['error']['message'])
-        return '\n'.join(results)
+            results.append(action_result(result, reject))
+        return '\n'.join(results), confirmation_visibility(turn)
 
     async def refresh(request: gr.Request):
         gateway = MCPGateway(engine.config)
@@ -84,7 +96,7 @@ def build_ui(engine):
             raise gr.Error('个人事项服务暂不可用，请稍后刷新。')
         rows = todos.get('data') or []
         choices = [(f"{r['title']} · {'已完成' if r['status'] == 'completed' else '待完成'}", r['id']) for r in rows]
-        todo_rows = [[r['title'], '已完成' if r['status'] == 'completed' else '待完成',
+        todo_rows = [[r['title'], '已完成' if r['status'] == 'completed' else '待完成', r.get('due_date') or '未设置',
                       '、'.join(r['materials'])] for r in rows]
         event_rows = [[r['title'], r['start'][:16].replace('T', ' '), r['end'][11:16],
                        r.get('location_name') or r['location']] for r in (events.get('data') or [])]
@@ -129,12 +141,12 @@ def build_ui(engine):
             history.extend([{'role': 'user', 'content': turn['message']},
                             {'role': 'assistant', 'content': turn.get('reply') or turn['status']}])
         if not turns:
-            return history, plan_markdown(None), None, [], '', '', ''
+            return history, plan_markdown(None), None, [], '', '', '', gr.update(visible=False), ''
         latest = turns[-1]
         plan = engine.db.get('plans', latest['plan_id']) if latest.get('plan_id') else None
         source_text = '\n\n'.join(f"**[{e['evidence_id']}] {e['title']}**\n\n{e['text']}"
                                    for e in latest.get('evidence', []))
-        return history, plan_markdown(plan), plan, latest.get('trace', []), source_text, latest['id'], latest.get('a2a_task_id', '')
+        return history, action_preview(latest, plan), plan, latest.get('trace', []), source_text, latest['id'], latest.get('a2a_task_id', ''), confirmation_visibility(latest), ''
 
     async def connections():
         result = await MCPGateway(engine.config).call('get_integration_status', {})
@@ -142,7 +154,7 @@ def build_ui(engine):
             return result['error']['message']
         data = result['data']
         return ('**地图与天气：** ' + data['maps_weather']['message'] + '\n\n**个人日历：** ' +
-                data['calendar']['message'] + '\n\n**学校通知与个人课表：** 仅预留接口，尚未连接学校系统。')
+                data['calendar']['message'] + '\n\n**学校通知、课程与宿舍：** 只读接口已预留，尚未连接学校授权数据源。')
 
     async def places(keywords, city):
         result = await MCPGateway(engine.config).call('search_places', {'keywords': keywords, 'city': city})
@@ -184,7 +196,6 @@ def build_ui(engine):
         result = await engine.confirm(action)
         return (f"已同步 {result['data']['synced_events']} 项日程。" + result['data'].get('notice', '')) if result.get('ok') else result['error']['message']
 
-    css = '.gradio-container {max-width: 1360px !important;} .hero {padding: 18px 0;} footer {display:none !important;}'
     def my_sessions(request: gr.Request):
         sessions = [s for s in engine.db.all('sessions') if s.get('user_id', 'demo-user') == user(request)]
         return '\n'.join('- `' + s['id'] + '`' for s in sessions) or '暂无会话，发送第一条消息后自动创建。'
@@ -200,97 +211,126 @@ def build_ui(engine):
                       'turn_id': turn_id, 'rating': rating, 'comment': (comment or '')[:2000], 'updated_at': time.time()})
         return '反馈已保存，感谢参与体验。'
 
-    with gr.Blocks(title='CampusPilot · 新生入学助手', theme=gr.themes.Soft(primary_hue='teal'), css=css) as ui:
-        gr.Markdown('# CampusPilot\n新生入学事务助手 · 查询规定 · 安排入学 · 管理待办', elem_classes='hero')
-        data_label = '武汉理工大学2026级本科公开资料 · 快照2026-10-11 · 独立项目，无校方合作' if engine.config.data_profile == 'whut-2026' else '合成校园测试数据'
-        gr.Markdown(f"{data_label} · 参考日期：{engine.config.demo_date} · {'确定性测试替身（非模型实测）' if engine.config.mode == 'fixture' else '真实模型模式：' + engine.config.model}")
-        if engine.config.data_profile == 'whut-2026':
-            gr.Markdown('办理清单按公开资料整理；个人地点和截止政策以学校通知为准。精确时间只用于你明确指定的个人提醒。')
-        if engine.config.auth_mode == 'pilot':
-            gr.Markdown('邀请体验版：个人会话、待办与日程按账号隔离。校园资料仅用于演示，请勿提交敏感材料。')
-            gr.HTML('<form method="post" action="/v1/auth/logout"><button type="submit">退出登录</button></form>')
-        turn_id = gr.State('')
+    def confirmation_visibility(turn):
+        actions = [engine.db.get('actions', aid) for aid in turn.get('pending_actions', [])]
+        return gr.update(visible=turn.get('workflow_outcome') != 'guard_rejected' and
+                         any(a and a['status'] in ('pending', 'retryable') for a in actions))
+
+    def new_conversation():
+        # Reset this browser view only. Saved sessions and personal items remain.
+        return '', '', [], '', None, [], '', '', '', gr.update(visible=False), '', ''
+
+    theme = gr.themes.Base(primary_hue='slate', neutral_hue='slate',
+                           font=['Segoe UI', 'Microsoft YaHei UI', 'sans-serif'])
+    with gr.Blocks(title='CampusPilot · 新生入学助手', theme=theme, css=CSS) as ui:
         plan_state = gr.State(None)
-        with gr.Row():
-            sid = gr.Textbox(label='会话编号（自动保存，可粘贴旧编号恢复）', scale=5)
-            restore_button = gr.Button('恢复会话', scale=1)
-        with gr.Accordion('我的会话', open=False):
-            sessions_button = gr.Button('查看我的会话编号')
-            sessions_text = gr.Markdown('会话可在退出登录或服务重启后恢复。')
-        with gr.Row():
-            with gr.Column(scale=6):
-                chat = gr.Chatbot(type='messages', label='入学助手', height=520)
-                message = gr.Textbox(label='你的问题或安排需求', placeholder='我是2026级本科生，帮我规划报到和入住的办理清单。', lines=2)
-                send = gr.Button('发送', variant='primary')
-                gr.Examples(['2026级本科生报到需要带哪些材料？', '我是2026级本科生，还没缴费，帮我规划报到和入住清单。',
-                             '帮我安排入学流程', '查看我的待办'], inputs=message)
-            with gr.Column(scale=5):
-                with gr.Tab('计划与确认'):
-                    preview = gr.Markdown(plan_markdown(None))
+        with gr.Row(elem_id='cp-header'):
+            gr.HTML(BRAND, elem_classes='cp-header-brand')
+            new_button = gr.Button('新对话', size='sm', elem_id='cp-new')
+            if engine.config.auth_mode == 'pilot':
+                gr.HTML('<form method="post" action="/v1/auth/logout"><button type="submit">退出</button></form>', elem_id='cp-logout')
+        with gr.Row(elem_id='cp-layout'):
+            with gr.Column(scale=8, min_width=0, elem_id='cp-main'):
+                chat = gr.Chatbot(type='messages', label='对话', show_label=False, container=False,
+                                  height=430, placeholder=WELCOME, show_copy_button=True,
+                                  show_share_button=False, elem_id='cp-chat')
+                with gr.Row(elem_id='cp-composer'):
+                    message = gr.Textbox(label='你的问题', show_label=False, container=False,
+                        placeholder='说说你想了解或要办的事…', lines=1, max_lines=5, scale=9, elem_id='cp-message')
+                    send = gr.Button('发送', variant='primary', scale=0, elem_id='cp-send')
+                gr.Markdown('Enter 发送，Shift + Enter 换行。保存前会请你确认。', elem_id='cp-hint')
+                with gr.Group(elem_id='cp-examples'):
+                    gr.Examples(['报到需要哪些材料？', '我是2026级本科生，帮我整理报到清单。', '查看我的待办'],
+                                inputs=message, label='试着问问', examples_per_page=3)
+                with gr.Group(visible=False, elem_id='cp-confirm') as confirmation:
+                    gr.Markdown('内容已生成，核对后再保存。')
+                    with gr.Accordion('查看待保存内容', open=False):
+                        preview = gr.Markdown('')
                     with gr.Row():
-                        save_button = gr.Button('确认执行本轮操作', variant='primary')
-                        reject_button = gr.Button('拒绝本轮操作')
-                    action_status = gr.Textbox(label='执行结果', lines=4, interactive=False)
-                    task_id = gr.Textbox(label='规划任务编号', interactive=False)
-                    cancel_button = gr.Button('取消当前规划')
-                with gr.Tab('引用来源'):
-                    sources = gr.Markdown('回答引用的原文会显示在这里。')
-                with gr.Tab('个人事项'):
-                    refresh_button = gr.Button('刷新待办与日程')
-                    todos = gr.Dataframe(headers=['事项', '状态', '材料'], datatype=['str', 'str', 'str'],
-                                         label='已保存待办', interactive=False)
-                    events = gr.Dataframe(headers=['事项', '开始', '结束', '地点'], datatype=['str'] * 4,
-                                          label='已保存日程', interactive=False)
-                    todo_choice = gr.Dropdown(label='选择待办', choices=[])
-                    done_button = gr.Button('确认标记为完成')
-                    export_button = gr.Button('导出日历文件')
-                    calendar_file = gr.Markdown('导出本人的已保存日程。')
-                with gr.Tab('运行详情'):
-                    trace = gr.JSON(label='可观察的工具调用与A2A状态（不含内部思维链）')
-                with gr.Tab('外部工具'):
-                    connection_text = gr.Markdown('点击检查连接状态；地图和天气需要配置高德密钥，个人日历暂未绑定平台。')
-                    connection_button = gr.Button('检查连接状态')
+                        save_button = gr.Button('确认保存', variant='primary')
+                        reject_button = gr.Button('先不保存')
+                action_status = gr.Markdown('')
+                with gr.Accordion('我的待办与日程', open=False, elem_classes='cp-fold'):
+                    refresh_button = gr.Button('查看最新事项', size='sm')
+                    todos = gr.Dataframe(headers=['事项', '状态', '截止日期', '材料'], datatype=['str'] * 4,
+                                         label='我的待办', interactive=False)
+                    with gr.Row():
+                        todo_choice = gr.Dropdown(label='选择待办', choices=[], scale=3)
+                        done_button = gr.Button('标记为完成', scale=1)
+                    todo_status = gr.Textbox(label='事项操作结果', interactive=False)
+                    with gr.Accordion('日程与导出', open=False):
+                        events = gr.Dataframe(headers=['事项', '开始', '结束', '地点'], datatype=['str'] * 4,
+                                              label='个人日程', interactive=False)
+                        export_button = gr.Button('导出日历文件', size='sm')
+                        calendar_file = gr.Markdown('仅导出已保存日程，不主动推送提醒。')
+                with gr.Accordion('历史对话', open=False, elem_classes='cp-fold'):
+                    gr.Markdown('新对话不会删除历史。输入会话编号可继续之前的对话。')
+                    with gr.Row():
+                        sid = gr.Textbox(label='会话编号', placeholder='发送消息后自动生成', scale=4)
+                        restore_button = gr.Button('恢复对话', scale=1)
+                    sessions_button = gr.Button('查看我的历史编号', size='sm')
+                    sessions_text = gr.Markdown('历史对话仅本人可见。')
+                with gr.Accordion('回答来源', open=False, elem_classes='cp-fold'):
+                    sources = gr.Markdown('有引用的回答会在这里显示资料原文。')
+                with gr.Accordion('反馈与运行详情', open=False, elem_classes='cp-fold'):
+                    rating = gr.Radio(choices=[('有帮助', 'helpful'), ('需要改进', 'unhelpful')], value='helpful', label='这次回答')
+                    comment = gr.Textbox(label='建议', placeholder='哪里需要改进？请勿填写敏感信息。', lines=2)
+                    feedback_button = gr.Button('提交反馈', size='sm')
+                    feedback_status = gr.Textbox(label='反馈结果', interactive=False)
+                    with gr.Accordion('调试信息', open=False):
+                        turn_id = gr.Textbox(label='本轮请求编号', interactive=False)
+                        task_id = gr.Textbox(label='规划任务编号', interactive=False)
+                        cancel_button = gr.Button('取消当前规划', size='sm')
+                        cancel_status = gr.Textbox(label='取消结果', interactive=False)
+                        trace = gr.JSON(label='工具调用记录')
+            with gr.Column(scale=3, min_width=0, elem_id='cp-sidebar'):
+                gr.HTML(FEATURES)
+                with gr.Accordion('更多工具', open=False, elem_classes='cp-fold'):
+                    gr.Markdown('地图与天气按连接状态提供；未接入学校个人平台。')
+                    connection_button = gr.Button('查看可用状态', size='sm')
+                    connection_text = gr.Markdown('尚未检查连接。')
                     with gr.Accordion('地点与路线', open=False):
-                        city = gr.Textbox(label='城市（必须明确）')
+                        city = gr.Textbox(label='城市')
                         keywords = gr.Textbox(label='地点关键词')
-                        place_button = gr.Button('查询候选地点')
+                        place_button = gr.Button('查询地点')
                         place_rows = gr.Dataframe(headers=['地点', '地址', '坐标', '行政区代码'], interactive=False)
                         place_status = gr.Textbox(label='地点查询结果', interactive=False)
                         origin = gr.Textbox(label='已确认起点坐标（经度,纬度）')
                         destination = gr.Textbox(label='已确认终点坐标（经度,纬度）')
-                        mode = gr.Dropdown(choices=[('步行', 'walking'), ('驾车', 'driving')], value='walking', label='出行方式')
+                        mode = gr.Dropdown(choices=[('步行', 'walking'), ('驾车', 'driving')], value='walking', label='方式')
                         route_button = gr.Button('查询路线')
                         route_result = gr.Textbox(label='路线结果', lines=5, interactive=False)
-                        gr.Markdown('个人报到地点需核实。未配置真实坐标时，不提供默认校门或报到点。')
-                    with gr.Accordion('天气预报', open=False):
-                        adcode = gr.Textbox(label='6位城市行政区代码（可从地点查询获得）')
-                        forecast_day = gr.Textbox(label='目标日期（YYYY-MM-DD；留空显示当前可用预报）')
+                    with gr.Accordion('天气', open=False):
+                        adcode = gr.Textbox(label='城市行政区代码')
+                        forecast_day = gr.Textbox(label='日期（YYYY-MM-DD，留空显示可用预报）')
                         weather_button = gr.Button('查询天气')
                         weather_result = gr.Textbox(label='天气结果', lines=5, interactive=False)
-                    with gr.Accordion('个人日历适配', open=False):
-                        gr.Markdown('已建立平台适配接口，暂不绑定账户。本地日程与ICS导出可正常使用。')
+                    with gr.Accordion('外部日历', open=False):
+                        gr.Markdown('暂未绑定外部日历，可先使用个人日程和日历文件导出。')
                         reminder = gr.Number(value=30, precision=0, minimum=0, maximum=10080, label='提前提醒分钟数')
-                        sync_propose = gr.Button('预览当前会话计划的日历同步')
+                        sync_propose = gr.Button('预览同步')
                         sync_action = gr.State('')
-                        sync_confirm = gr.Button('确认同步到外部日历')
+                        sync_confirm = gr.Button('确认同步')
                         sync_status = gr.Textbox(label='同步结果', interactive=False)
-        with gr.Accordion('体验反馈', open=False):
-            rating = gr.Radio(choices=[('有帮助', 'helpful'), ('需要改进', 'unhelpful')], value='helpful', label='本轮回答')
-            comment = gr.Textbox(label='问题或建议（请勿填写敏感信息）', max_lines=4)
-            feedback_button = gr.Button('提交本轮反馈')
-            feedback_status = gr.Textbox(label='反馈结果', interactive=False)
-        outputs = [message, sid, chat, preview, plan_state, trace, sources, turn_id, task_id]
-        send.click(submit, [message, sid, chat], outputs)
-        message.submit(submit, [message, sid, chat], outputs)
-        restore_button.click(restore, sid, [chat, preview, plan_state, trace, sources, turn_id, task_id])
-        save_button.click(save, turn_id, action_status)
+                scope = ('武汉理工大学 · 2026级本科<br>资料快照：2026-10-11<br>非校方系统，以学校最新通知为准。'
+                         if engine.config.data_profile == 'whut-2026' else '合成校园测试数据，不作为真实学校规定。')
+                mode_label = '流程测试模式，非真实模型' if engine.config.mode == 'fixture' else '真实模型模式'
+                gr.Markdown(scope + f'<br>{mode_label} · 参考日期 {engine.config.demo_date}<br>请勿提交敏感材料。', elem_id='cp-scope')
+        outputs = [message, sid, chat, preview, plan_state, trace, sources, turn_id, task_id, confirmation, action_status]
+        send_event = send.click(submit, [message, sid, chat], outputs)
+        enter_event = message.submit(submit, [message, sid, chat], outputs)
+        new_button.click(new_conversation, outputs=outputs + [sync_action], cancels=[send_event, enter_event], queue=False)
+        chat.clear(new_conversation, outputs=outputs + [sync_action], cancels=[send_event, enter_event], queue=False,
+                   api_name='clear_conversation')
+        restore_button.click(restore, sid, [chat, preview, plan_state, trace, sources, turn_id, task_id, confirmation, action_status])
+        save_button.click(save, turn_id, [action_status, confirmation])
         async def reject_current(value, request: gr.Request):
             return await save(value, request, True)
-        reject_button.click(reject_current, turn_id, action_status)
+        reject_button.click(reject_current, turn_id, [action_status, confirmation])
         refresh_button.click(refresh, outputs=[todos, events, todo_choice])
-        done_button.click(complete, [todo_choice, sid], action_status)
+        done_button.click(complete, [todo_choice, sid], todo_status)
         export_button.click(export, outputs=calendar_file)
-        cancel_button.click(cancel, task_id, action_status, queue=False)
+        cancel_button.click(cancel, task_id, cancel_status, queue=False)
         connection_button.click(connections, outputs=connection_text)
         place_button.click(places, [keywords, city], [place_rows, place_status])
         route_button.click(route, [origin, destination, mode], route_result)

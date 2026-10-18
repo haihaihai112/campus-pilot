@@ -43,9 +43,10 @@ Docker Compose 将 `./config` 只读挂载到工具服务 `/config`，按上述�
 |list_external_calendar_events|start, end|ISO8601带时区，查询范围不超过31天|
 |sync_plan_calendar|plan_id, plan_version, provider_binding, reminder_minutes, operation_id, user_id|写凭据限定，从服务端已保存计划读取内容|
 |search_school_notices|query, campus_id=null|未连接占位|
-|get_timetable|start_date, end_date|未连接占位|
+|get_timetable|start_date, end_date，服务端user_id|课程只读契约；默认未接通|
+|get_dorm_assignment|服务端user_id|宿舍只读契约；默认未接通，不向模型发现|
 
-主 Agent 能调用新增只读工具以及 `request_calendar_sync` 提议工具。模型工具列表不暴露实际写工具；规划服务只读凭据尝试同步日历会被校园服务拒绝。
+主 Agent 能调用已启用的新增只读工具以及 `request_calendar_sync` 提议工具；宿舍查询不进入模型发现列表，试用模式课表查询仍保留个人平台未绑定拦截。模型工具列表不暴露实际写工具；规划服务只读凭据尝试同步日历会被校园服务拒绝。
 
 主应用增加 `GET /v1/integrations`、`POST /v1/maps/places`、`POST /v1/maps/route`、`POST /v1/weather`、`GET /v1/calendar/external?start=...&end=...` 和 `POST /v1/calendar/propose-sync`。
 
